@@ -5,6 +5,7 @@ import Manga from "@/views/Manga.vue";
 import Options from "@/views/Options.vue";
 import Login from "@/views/Login.vue";
 import Register from "@/views/Register.vue";
+import Users from "@/views/Users.vue";
 import User from "@/views/User.vue";
 import ErrorComp from "@/views/Error.vue";
 
@@ -38,6 +39,11 @@ const routes = [
     path: "/register",
     name: "Register",
     component: Register
+  },
+  {
+    path: "/users",
+    name: "Users",
+    component: Users
   },
   {
     path: "/users/:user",

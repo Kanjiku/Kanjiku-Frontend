@@ -1,6 +1,5 @@
 import { createStore } from "vuex";
 import { post } from "@/funcs/essentials";
-import { router } from "@/router/index";
 
 import themeModule from "./themeModule";
 import alertModule from "./alertModule";
@@ -8,7 +7,7 @@ import statusModule from "./statusModule";
 
 export default createStore({
   actions: {
-    post: async function({ commit }, type, input_object, api_endpoint,include_token) {
+    post: async function({ commit }, [type, input_object, api_endpoint,include_token]) {
       let [status, data] = await post(type, input_object, api_endpoint, include_token);
       if(data.Alert){
         let duration = 5000;
@@ -21,9 +20,12 @@ export default createStore({
       }
     
       //handle Redirects
+      /*console.log("redirect",data);
       if (data.Redirect){
+        console.log("Redirect",data);
         router.push(data.Redirect.redirect_url);
-      }
+      }*/
+
       return [status, data];
     }
   },

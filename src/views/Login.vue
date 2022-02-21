@@ -21,7 +21,7 @@
 import { ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import { post, createCookie } from "@/funcs/essentials";
+import { setCookie } from "tiny-cookie";
 
 const store = useStore();
 const router = useRouter();
@@ -36,13 +36,14 @@ const login = () => {
   data["username"] = username.value;
   data["remember_me"] = false;
 
-  post("POST", data, 'login').then(([status,response]) => {
-    if (Math.floor(status/100) != 2) return;
-    createCookie("token", response.Login.token);
-    store.commit("setUsername", username.value)
-    store.commit("setLoggedIn", true);
+  store.dispatch("post", ["POST", data, 'login'])
+    .then(([status,response]) => {
+      if (Math.floor(status/100) != 2) return;
+      setCookie("token", response.Login.token, { expires: "1D"});
+      store.commit("setUsername", username.value)
+      store.commit("setLoggedIn", true);
 
-    router.push({name:"User", params: {user: username.value}});
+      router.push({name:"User", params: {user: username.value}});
   });
 }
 </script>

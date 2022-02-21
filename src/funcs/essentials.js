@@ -1,29 +1,4 @@
-function createCookie(name, value, days) {
-  var expires = "";
-  if (days) {
-    var today = new Date();
-    var valid_until = new Date();
-    valid_until.setDate(today.getDate()+days);
-    expires = "; expires=" + valid_until.toUTCString();
-  }
-
-  document.cookie = name + "=" + value + expires + "; path=/";
-}
-
-function getCookie(name) {
-  var nameEQ = name + "=";
-  var ca = document.cookie.split(';');
-  for (var i = 0; i < ca.length; i++) {
-    var c = ca[i];
-    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-  }
-  return null;
-}
-
-function deleteCookie(name) {
-  createCookie(name, "", -1);
-}
+import { getCookie, setCookie, removeCookie } from "tiny-cookie";
 
 async function post(type, input_object, api_endpoint,include_token = true) {
 
@@ -64,8 +39,5 @@ async function post(type, input_object, api_endpoint,include_token = true) {
 }
 
 export {
-  createCookie,
-  getCookie,
-  deleteCookie,
   post
 }

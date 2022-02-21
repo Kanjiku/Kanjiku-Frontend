@@ -7,7 +7,7 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
-import { useRoute, useRouter, onBeforeRouteEnter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { post } from "@/funcs/essentials";
 
 const store = useStore();
@@ -18,20 +18,28 @@ let username = ref("");
 let avatar_url = "";
 
 const getUserData = () => {
-  post("GET",{},"user/"+route.params.user).then(([status, response]) => {
-    if (Math.floor(status / 100) != 2) {
-      username.value = "Unknown User";
-      return;
-    }
-    username.value = response.username;
+  store.dispatch("post", ["GET",{},"user/"+route.params.user])
+    .then(([status, response]) => {
+      if (response.Redirect) {
+        console.log(response.Redirect.redirect_url);
+        router.push(response.Redirect.redirect_url);
+      }
+      if (Math.floor(status / 100) != 2) {
+        username.value = "Unknown User";
+        return;
+      }
+      username.value = response.username;
   });
 }
 
 onMounted(() => {
   getUserData();
 });
+
 watch(() => route.params.user, () => {
-  getUserData();
+  if (route.params.user) {
+    getUserData();
+  }
 })
 
 </script>

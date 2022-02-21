@@ -12,9 +12,10 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed } from "vue";
 import { useStore } from "vuex";
-import { post, getCookie } from '@/funcs/essentials';
+import { getCookie } from "tiny-cookie";
+import { post } from '@/funcs/essentials';
 
 import Navbar from "@/views/Navbar.vue";
 
@@ -25,10 +26,11 @@ const alerts = computed(() => store.getters.getAlerts);
 const removeAlert = (id) => store.commit("removeAlert", id);
 
 if (getCookie("token") ? true : false) {
-  post("GET", {}, "header").then(([status, response]) => {
-    if (Math.floor(status / 100) != 2) return;
-    store.commit("setLoggedIn", true);
-    store.commit("setUsername", response.username);
+  store.dispatch("post", ["GET", {}, "header"])
+    .then(([status, response]) => {
+      if (Math.floor(status / 100) != 2) return;
+      store.commit("setLoggedIn", true);
+      store.commit("setUsername", response.username);
   });
 }
 

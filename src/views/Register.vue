@@ -29,7 +29,7 @@
 import { ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import { post, createCookie } from "@/funcs/essentials";
+import { setCookie } from "tiny-cookie";
 
 const store = useStore();
 const router = useRouter();
@@ -49,22 +49,24 @@ const register = () => {
   data["username"] = username.value;
   data["email"] = email.value;
 
-  post("POST",data,'register').then(([status, response]) => {
-    if (Math.floor(status/100) != 2) return;
-    var loginData = {"action":"login"};
-    loginData["password"] = data.password;
-    loginData["username"] = data.username;
-    loginData["remember_me"] = false;
-
-    post("POST",loginData,"login").then(([status,response]) => {
+  store.dispatch("post", ["POST",data,'register'])
+    .then(([status, response]) => {
       if (Math.floor(status/100) != 2) return;
-      createCookie("token", response.Login.token);
-      var username = response.Redirect.redirect_url.slice(response.Redirect.redirect_url.lastIndexOf("/")+1);
-      store.commit("setUsername", username);
-      store.commit("setLoggedIn", true);
+      var loginData = {"action":"login"};
+      loginData["password"] = data.password;
+      loginData["username"] = data.username;
+      loginData["remember_me"] = false;
 
-      router.push({name:"User", params: {user: username}});
-    })
+      store.dispatch("post", ["POST",loginData,"login"])
+        .then(([status,response]) => {
+          if (Math.floor(status/100) != 2) return;
+          setCookie("token", response.Login.token, { expires: "1D" });
+          var username = response.Redirect.redirect_url.slice(response.Redirect.redirect_url.lastIndexOf("/")+1);
+          store.commit("setUsername", username);
+          store.commit("setLoggedIn", true);
+
+          router.push({name:"User", params: {user: username}});
+      });
   });
 };
 </script>

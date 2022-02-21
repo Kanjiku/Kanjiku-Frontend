@@ -60,17 +60,18 @@
 import { computed } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import { post, deleteCookie } from "@/funcs/essentials";
+import { removeCookie } from "tiny-cookie";
 
 const store = useStore();
 const router = useRouter();
 
 const loggedIn = computed(() => store.getters.isLoggedIn);
 const logout = () => {
-  post("GET", {}, 'logout').then(() => {
-    store.commit("setLoggedIn", false);
-    store.commit("setUsername", "");
-    deleteCookie("token");
+  store.dispatch("post", ["GET", {}, 'logout'])
+    .then(() => {
+      store.commit("setLoggedIn", false);
+      store.commit("setUsername", "");
+      removeCookie("token");
   });
 }
 
