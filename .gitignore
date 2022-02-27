@@ -1,5 +1,7 @@
 node_modules
 .browserslistrc
+dist
+
 
 # local env files
 .env.local

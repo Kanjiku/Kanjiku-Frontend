@@ -87,7 +87,7 @@ const mutations = <MutationTree<State>> {
 const actions = <ActionTree<State, RootState>> {
     initThemes: async function({ state }) {
         const added = state.themes.map((name: string) => {
-            return state.themeHelper.add(name, window.location.origin+"/"+name.toLowerCase()+".min.css");
+            return state.themeHelper.add(name, "https://bootswatch.com/5/"+name.toLowerCase()+"/bootstrap.min.css");
         });
     
         if (!state.themes.includes(localStorage.getItem("theme") ?? "")) {
