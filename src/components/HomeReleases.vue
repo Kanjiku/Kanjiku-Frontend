@@ -1,13 +1,11 @@
 <template>
-  <div class="home-releases">
+    <div class="home-releases">
 
-  </div>
+    </div>
 </template>
 
-<script>
-export default {
-  name: "HomeReleases",
-};
+<script lang="ts" setup>
+
 </script>
 
 <style>
