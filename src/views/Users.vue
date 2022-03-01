@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, Ref } from 'vue';
+import { ref, Ref, watch, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
@@ -55,18 +55,18 @@ const revoke_url = (user: User) => {
     user.loaded = true;
 }
 
-const init = () => {
-    if (!store.getters.isLoggedIn) {
-        router.push({path:"/"});
-        return;
+onMounted(() => {
+    if (store.getters.isLoggedIn) {
+        getUsers();
+    } else {
+        let loginWatcher = watch(() => store.getters.isLoggedIn, (b) => {
+            console.log("loggedin", b);
+            if (!b) return;
+            getUsers();
+            loginWatcher();
+        }, {immediate: true});
     }
-    getUsers();
-}
-
-store.dispatch("awaitChecked").then(() => {
-    init();
 })
-
 </script>
 
 <style scoped lang="scss">

@@ -35,6 +35,7 @@ npm run lint
 
 - Registration / Login / Logout
 - Switching themes
+- Showing all users
 
 # TODO
 - a lot

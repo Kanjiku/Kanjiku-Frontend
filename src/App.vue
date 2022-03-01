@@ -44,6 +44,7 @@ store.dispatch("initThemes");
 <style scoped lang="scss">
 .main {
     min-height: 100vh;
+    overflow-x: hidden;
 }
 .alerts {
     position: fixed;
@@ -60,12 +61,8 @@ store.dispatch("initThemes");
     transition: all 0.5s;
     position: absolute;
 }
-.alerts-enter-from {
+.alerts-enter-from, .alerts-leave-to {
     opacity: 0;
-}
-.alerts-leave-to {
-    opacity: 0;
-    transform: translateX(100%);
 }
 .navbar {
     margin-bottom: 2rem;

@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 
@@ -24,12 +24,17 @@ const getUserData = () => {
     .catch((_) => ({}));
 }
 
-const init = () => {
-    getUserData();
-}
-
-store.dispatch("awaitChecked").then(() => {
-    init();
+onMounted(() => {
+    if (store.getters.isLoggedIn) {
+        getUserData();
+    } else {
+        let loginWatcher = watch(() => store.getters.isLoggedIn, (b) => {
+            console.log("loggedin", b);
+            if (!b) return;
+            getUserData();
+            loginWatcher();
+        }, {immediate: true});
+    }
 })
 
 watch(() => route.params.user, () => {

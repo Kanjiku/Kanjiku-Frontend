@@ -28,7 +28,6 @@ import { setCookie } from "tiny-cookie";
 const store = useStore();
 const router = useRouter();
 
-
 let username = ref("");
 let password = ref("");
 

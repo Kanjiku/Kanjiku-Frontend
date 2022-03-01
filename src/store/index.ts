@@ -81,15 +81,13 @@ const actions = <ActionTree<State, State>> {
         }
         
         const url = window.location.protocol+"//"+window.location.hostname+":8000"+"/"+api_endpoint;
-        console.log("'"+api_endpoint+"'\n",requestOptions);
         const response = await fetch(url, requestOptions);
         const data: ResponseData = await response.json().catch(error => {
             console.log(response)
             console.log('There was an error!', error);
         });
         
-        console.log(response.status)
-        console.log(data)
+        console.log("'"+api_endpoint+"'\n",requestOptions,"\n",response.status,"\n",data);
 
         //handle alerts
         if(data.Alert){
