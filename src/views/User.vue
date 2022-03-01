@@ -41,9 +41,4 @@ watch(() => route.params.user, () => {
 </script>
 
 <style scoped lang="scss">
-.user {
-    width: 50vw;
-    margin: auto;
-    padding: 2rem;
-}
 </style>

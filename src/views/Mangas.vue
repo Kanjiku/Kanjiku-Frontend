@@ -1,12 +1,13 @@
 <template>
-    <div class="mangas">
-        <h2>Manga</h2>
-        <div class="manga-grid">
-            <router-link class="manga" v-for="(manga, id) in mangas" :key="id" :to="{name: 'Manga', params: {name: manga.url_friendly_name}}">
-                <div class="img">
-                    <img :src="manga.image">
+    <div class="mangas container">
+        <h2 class="mb-3">Manga</h2>
+        <div class="manga-grid row gx-4 gy-4 p-2">
+            <router-link class="manga h-100 col-6 col-sm-4 col-md-3 text-decoration-none"
+            v-for="(manga, id) in mangas" :key="id" :to="{name: 'Manga', params: {name: manga.url_friendly_name}}">
+                <div class="ratio"  style="--bs-aspect-ratio: 140%">
+                    <img :src="manga.image" class="ratio">
                 </div>
-                <p>{{ manga.title }}</p>
+                <p class="mt-2 ps-3">{{ manga.title }}</p>
             </router-link>
         </div>
     </div>
@@ -55,81 +56,28 @@ fetchManga();
 
 <style scoped lang="scss">
 .mangas {
-    width: 50vw;
-    margin: auto;
-    padding: 2rem;
-    
-    h3 {
-        margin-bottom: 1.5rem;
-    }
-    
     .manga-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-        column-gap: 1.5rem;
-        row-gap: 2rem;
-
         .manga {
-            position: relative;
-            width: 100%;
-
-            overflow: hidden;
-
-            transition: all 0.2s;
-            cursor: pointer;
-
-            text-decoration: none;
-            
-            .img {
-                position: relative;
+            cursor: pointer;            
+            .ratio::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
                 width: 100%;
-                padding-bottom: calc(100% * 4 / 3);
-                
-
-                &::after {
-                    content: "";
-                    overflow-x: hidden;
-                    box-shadow: inset 0px -20px 20px -20px #000;
-                    position: absolute;
-                    width: 100%;
-                    height: 100%;
-                    top: 0;
-                    left: 0;
-                    z-index: 2;
-                    opacity: 0;
-                    background-color: transparent;
-                    transition: opacity .2s;
-
-                }
-
-                img {
-                    overflow: visible;
-                    position: absolute;
-                    left: 0;
-                    top: 0;
-                    width: 100%;
-                    height: 100%;
-                    
-                    z-index: 1;
-                }
+                height: 100%;
+                background-color: #000;
+                opacity: 0;
+                transition: opacity .2s;
             }
 
             p {
-                height: 2rem;
-                display: flex;
-                align-items: center;
-                justify-content: left;
-                font-size: 1rem;
-                padding-left: 1rem;
-                margin-bottom: 0;
                 color: var(--bs-body-color);
-
                 transition: color .5s;
             }
 
             &:hover {
-                .img::after {
-                    background-color: #000;
+                .ratio::after {
                     opacity: .5;
                 }
 

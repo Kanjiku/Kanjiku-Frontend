@@ -1,19 +1,21 @@
 <template>
     <div class="login">
-        <h2>Login</h2>
-        <form>
-            <fieldset>
-                <div class="form-group">
-                    <label for="username" class="form-label mt-4">Username</label>
-                    <input type="text" class="form-control" id="username" placeholder="Username" v-model="username">
-                </div>
-                <div class="form-group">
-                    <label for="password" class="form-label mt-4">Password</label>
-                    <input type="password" class="form-control" id="password" placeholder="Password" v-model="password">
-                </div>
-                <button @click.prevent="login()" type="submit" class="btn btn-primary">Login</button>
-            </fieldset>
-        </form>
+        <div class="mx-auto col-12 col-sm-10 col-md-8 mb-4">
+            <h2>Login</h2>
+            <form>
+                <fieldset>
+                    <div class="form-group mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" placeholder="Username" v-model="username">
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" placeholder="Password" v-model="password">
+                    </div>
+                    <button @click.prevent="login()" type="submit" class="btn btn-primary">Login</button>
+                </fieldset>
+            </form>
+        </div>
     </div>
 </template>
 
@@ -50,20 +52,4 @@ const login = () => {
 </script>
 
 <style lang="scss" scoped>
-.login {
-    width: max(500px, 40vw);
-    margin: auto;
-    padding: 2rem;
-
-    button {
-        margin-top: 2rem;
-    }
-}
-
-@media only screen and (max-width: 768px) {
-  /* For mobile phones: */
-  .login {
-      width: min(100%, 500px);
-  }
-}
 </style>

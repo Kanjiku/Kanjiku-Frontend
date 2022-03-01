@@ -1,13 +1,13 @@
 <template>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-3">
         <div class="container-fluid">
             <router-link class="navbar-brand" :to="{name: 'Home'}">Kanjiku</router-link>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarColor01">
-                <ul class="navbar-nav me-auto">
+            <div class="collapse navbar-collapse justify-content-between" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
                         <router-link class="nav-link" :to="{name: 'Home'}">Home</router-link>
                     </li>
@@ -34,26 +34,22 @@
                         </div>
                     </li>
                 </ul>
-                <form class="d-flex">
-                    <!--<input class="form-control me-sm-2" type="text" placeholder="Search">
-                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>-->
-                    <ul class="navbar-nav me-auto" v-if="loggedIn">
-                        <li class="nav-item">
-                            <a class="nav-link" @click.prevent="logout()">Logout</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" @click.prevent="gotoProfile()">Profile</a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav me-auto" v-else>
-                        <li class="nav-item">
-                            <router-link class="nav-link" :to="{name: 'Login'}">Login</router-link>
-                        </li>
-                        <li class="nav-item">
-                            <router-link class="nav-link" :to="{name: 'Register'}">Register</router-link>
-                        </li>
-                    </ul>
-                </form>
+                <ul class="navbar-nav" v-if="loggedIn">
+                    <li class="nav-item">
+                        <a class="nav-link" @click.prevent="logout()">Logout</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" @click.prevent="gotoProfile()">Profile</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav" v-else>
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{name: 'Login'}">Login</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" :to="{name: 'Register'}">Register</router-link>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>

@@ -1,7 +1,7 @@
 <template>
-    <div class="error">
-        <h1>ERROR {{ props.status }}</h1>
-        <p>{{ props.text }}</p>
+    <div class="error container d-flex flex-column justify-content-center">
+        <h1 class="text-center fs-1">ERROR {{ props.status }}</h1>
+        <p class="text-center">{{ props.text }}</p>
     </div>
 </template>
 
@@ -23,15 +23,6 @@ const props = defineProps({
 
 <style scoped lang="scss">
 .error {
-    width: 50vw;
     height: 70vh;
-    margin: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    h1 {
-        font-size: 4rem;
-    }
 }
 </style>

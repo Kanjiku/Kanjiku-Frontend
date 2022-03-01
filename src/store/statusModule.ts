@@ -1,4 +1,5 @@
 import { ActionTree, GetterTree, MutationTree } from "vuex";
+import themeModule from "./themeModule";
 
 class RootState {}
 
@@ -31,12 +32,17 @@ const actions = <ActionTree<State, RootState>> {
         console.log(state.checked)
         if (!state.checked) {
             await new Promise<void>((resolve) => {
-                setTimeout(() => {
-                    console.log("check", state.checked);
-                    if (state.checked) {
-                        resolve();
-                    }
-                }, 200);
+                const tm = function() {
+                    setTimeout(() => {
+                        console.log("check", state.checked);
+                        if (state.checked) {
+                            resolve();
+                        } else {
+                            tm();
+                        }
+                    }, 200)
+                }
+                tm();
             });
         }
     }

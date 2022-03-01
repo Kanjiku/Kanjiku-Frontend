@@ -1,13 +1,13 @@
 <template>
-    <div class="main" v-if="!store.getters.isLoading">
+    <div class="main d-flex-column container-fluid p-0" v-if="!store.getters.isLoading">
         <Navbar />
-        <TransitionGroup tag="div" class="alerts" name="alerts">
-            <div v-for="(alert) in alerts" :key="alert.id" :class="[alert.type]" class="alert alert-dismissible">
+        <TransitionGroup tag="div" class="alerts row flex-column w-100 gy-5 p-0 mx-auto align-items-center position-absolute" name="alerts">
+            <div v-for="(alert) in alerts" :key="alert.id" :class="[alert.type]" class="my-1 col-sm-10 col-12 alert alert-dismissible">
                 <button @click="store.commit('removeAlert', alert.id)" type="button" class="btn-close"></button>
                 <p class="mb-0">{{ alert.text }}</p>
             </div>
         </TransitionGroup>
-        <router-view />
+        <router-view class="container col-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6 mt-sm-4 mb-4" />
     </div>
 </template>
 
@@ -34,6 +34,8 @@ if (getCookie("token") ? true : false) {
     store.commit("setChecked", true);
 }
 
+store.commit("addAlert", ["alert-info", "Hello World", 300000])
+
 store.dispatch("initThemes");
 
 </script>
@@ -45,15 +47,9 @@ store.dispatch("initThemes");
 }
 .alerts {
     position: fixed;
-    width: 100vw;
+    //width: 100vw;
     z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     margin-top: -1rem;
-    .alert {
-        width: 60vw;
-    }
 }
 
 .alerts-move, .alerts-enter-active, .alerts-leave-active {
@@ -69,7 +65,7 @@ store.dispatch("initThemes");
 }
 .alerts-leave-to {
     opacity: 0;
-    transform: translateX(70px);
+    transform: translateX(100%);
 }
 .navbar {
     margin-bottom: 2rem;

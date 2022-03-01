@@ -1,27 +1,29 @@
 <template>
     <div class="register">
-        <h2>Register</h2>
-        <form>
-            <fieldset>
-                <div class="form-group">
-                    <label for="username" class="form-label mt-4">Username</label>
-                    <input type="text" class="form-control" id="username" placeholder="Username" v-model="username">
-                </div>
-                <div class="form-group">
-                    <label for="email" class="form-label mt-4">Email</label>
-                    <input type="text" class="form-control" id="email" placeholder="Email" v-model="email">
-                </div>
-                <div class="form-group">
-                    <label for="password" class="form-label mt-4">Password</label>
-                    <input type="password" class="form-control" id="password" placeholder="Password" v-model="password">
-                </div>
-                <div class="form-group">
-                    <label for="passwordconfirm" class="form-label mt-4">Password Confirmation</label>
-                    <input type="password" class="form-control" id="passwordconfirm" placeholder="Confirm Password" v-model="passwordconfirm">
-                </div>
-                <button @click.prevent="register()" type="submit" class="btn btn-primary">Register</button>
-            </fieldset>
-        </form>
+        <div class="mx-auto col-12 col-sm-10 col-md-8 mb-4">
+            <h2>Register</h2>
+            <form>
+                <fieldset>
+                    <div class="form-group mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" placeholder="Username" v-model="username">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="text" class="form-control" id="email" placeholder="Email" v-model="email">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" placeholder="Password" v-model="password">
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="passwordconfirm" class="form-label">Password Confirmation</label>
+                        <input type="password" class="form-control" id="passwordconfirm" placeholder="Confirm Password" v-model="passwordconfirm">
+                    </div>
+                    <button @click.prevent="register()" type="submit" class="btn btn-primary">Register</button>
+                </fieldset>
+            </form>
+        </div>
     </div>
 </template>
 
@@ -72,13 +74,4 @@ const register = () => {
 </script>
 
 <style lang="scss" scoped>
-.register {
-    width: 40vw;
-    margin: auto;
-    padding: 2rem;
-
-    button {
-        margin-top: 2rem;
-    }
-}
 </style>

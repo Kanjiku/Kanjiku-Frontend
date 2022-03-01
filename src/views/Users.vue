@@ -1,10 +1,15 @@
 <template>
     <div class="users">
-        <h2>Users</h2>
-        <div class="user-container">
-            <div class="user" v-for="user in users" :key="user.username" @click="to_user(user.username)" v-show="user.loaded">
-                <img class="avatar" :src="user.url" @load="revoke_url(user)">
-                <p class="username">{{ user.username }}</p>
+        <div class="mx-auto col-10">
+            <h2>Users</h2>
+            <div class="row gy-4 gx-5 gx-sm-4 p-3 mx-auto">
+                <router-link class="user col-6 col-sm-4 col-md-3 text-decoration-none"
+                v-for="user in users" :key="user.username" :to="{name: 'User', params: {user: user.username}}" v-show="user.loaded">
+                    <div class="ratio" style="--bs-aspect-ratio: 100%">
+                        <img class="avatar" :src="user.url" @load="revoke_url(user)">
+                    </div>
+                    <p class="username my-2 text-center">{{ user.username }}</p>
+                </router-link>
             </div>
         </div>
     </div>
@@ -46,12 +51,8 @@ const getUsers = () => {
 
 const revoke_url = (user: User) => {
     if (!user.url) return;
-    user.loaded = true;
     URL.revokeObjectURL(user.url);
-}
-
-const to_user = (username: string) => {
-    router.push({ name: "User", params: { user: username } });
+    user.loaded = true;
 }
 
 const init = () => {
@@ -69,35 +70,16 @@ store.dispatch("awaitChecked").then(() => {
 </script>
 
 <style scoped lang="scss">
-.users {
-    width: max(720px, 50vw);
-    margin: auto;
-    padding: 2rem;
+.user {
+    cursor: default;
+}
 
-    .user-container {
-        margin-top: 1rem;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-        column-gap: 2rem;
-        grid-gap: 2rem;
-
-        .user {
-            cursor:pointer;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            .avatar {
-                width: 100%;
-                aspect-ratio: 1;
-                outline-style: none;
-            }
-
-            .username {
-                margin-top: .5rem;
-                text-align: center;
-            }
-        }
-    }
+.avatar {
+    cursor: pointer;
+    border-radius: 100%;
+}
+.username {
+    cursor: pointer;
+    color: var(--bs-body-color);
 }
 </style>
