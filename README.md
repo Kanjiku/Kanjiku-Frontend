@@ -1,7 +1,7 @@
 # Introduction
 
 This is the frontend for a scanlation site.\
-using VueJS 3 composition-api
+using VueJS 3 composition-api typescript
 
 # Installation
 
