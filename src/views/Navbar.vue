@@ -67,7 +67,7 @@ const router = useRouter();
 
 
 const logout = () => {
-    post("GET", {}, 'logout', {alert: false, redirect: router})
+    post("GET", {}, 'logout', {redirect: router})
     .then(() => {
         statusStore.loggedIn = false;
         statusStore.username = "";

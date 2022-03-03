@@ -1,6 +1,6 @@
 <template>
     <div class="users">
-        <div class="mx-auto col-10">
+        <div class="mx-auto col-10" v-show="loaded">
             <h2>Users</h2>
             <div class="row gy-4 gx-5 gx-sm-4 p-3 mx-auto">
                 <router-link class="user col-6 col-sm-4 col-md-3 text-decoration-none"
@@ -17,13 +17,12 @@
 
 <script lang="ts" setup>
 import { ref, Ref, watch, onMounted } from 'vue';
-import { post, get_avatar } from "@/funcs/requests";
+import { post, get_avatar, ResponseGetUsers } from "@/funcs/requests";
 import { useStatusStore } from "@/store/statusStore";
 import { useRouter } from 'vue-router';
 
 const statusStore = useStatusStore();
 const router = useRouter();
-
 
 type User = {
     username: string,
@@ -32,10 +31,12 @@ type User = {
     loaded?: boolean
 }
 
+let loaded = ref(false);
+
 const users: Ref<User[]> = ref([]);
 
 const getUsers = () => {
-    post("GET", {}, "users")
+    post<ResponseGetUsers>("GET", {}, "users", {redirect: router})
     .then(([status, response]) => {
         users.value = response.Users;
         for (const user of users.value) {
@@ -44,6 +45,7 @@ const getUsers = () => {
                 user.url = url;
             });
         }
+        loaded.value = true;
     })
     .catch((_) => {
         router.push({path:"/"});
@@ -57,15 +59,14 @@ const revoke_url = (user: User) => {
 }
 
 onMounted(() => {
-    if (statusStore.loggedIn) {
+    if (statusStore.checked) {
         getUsers();
     } else {
-        let loginWatcher = watch(() => statusStore.loggedIn, (b) => {
-            console.log("loggedin", b);
+        let loginWatcher = watch(() => statusStore.checked, (_, b) => {
             if (!b) return;
             getUsers();
             loginWatcher();
-        }, {immediate: true});
+        });
     }
 })
 </script>

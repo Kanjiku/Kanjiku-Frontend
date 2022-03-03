@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { post } from "@/funcs/requests";
+import { post, ResponseGetHeader } from "@/funcs/requests";
 import { useStatusStore } from "@/store/statusStore";
 import { useThemeStore } from "@/store/themeStore";
 import { getCookie, removeCookie } from "tiny-cookie";
@@ -19,11 +19,11 @@ const statusStore = useStatusStore();
 const themeStore = useThemeStore();
 
 if (getCookie("token") ? true : false) {
-    post("GET", {}, "header")
+    post<ResponseGetHeader>("GET", {}, "header")
         .then(([status, response]) => {
             if (Math.floor(status / 100) != 2) return;
             statusStore.loggedIn = true;
-            statusStore.username = response.username ?? "";
+            statusStore.username = response.username;
             statusStore.checked = true;
         }).catch((e) => {
             console.error(e);
@@ -31,8 +31,7 @@ if (getCookie("token") ? true : false) {
             removeCookie("token")
         });
 } else {
-    console.log("no cookie");
-    statusStore.$patch({ checked: true });
+    statusStore.checked = true;
 }
 
 themeStore.initThemes();

@@ -21,7 +21,7 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { post } from "@/funcs/requests";
+import { post, ResponseLogin } from "@/funcs/requests";
 import { useStatusStore } from "@/store/statusStore";
 import { useRouter } from "vue-router";
 import { setCookie } from "tiny-cookie";
@@ -40,7 +40,7 @@ const login = () => {
         "remember_me": false
     };
 
-    post("POST", data, 'login', {alert: false, redirect: router})
+    post<ResponseLogin>("POST", data, 'login', {alert: false, redirect: router})
         .then(([_,response]) => {
             setCookie("token", response.Login.token, { expires: "1D"});
             statusStore.username = username.value;

@@ -39,7 +39,6 @@ export const useThemeStore = defineStore("theme", {
         },
 
         selectTheme(name: string) {
-            console.log(name, this.themes);
             if (!(name != null && (name in this.themes))) {
                 throw new Error(`unknown theme "${name}"`);
             }

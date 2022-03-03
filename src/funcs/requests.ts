@@ -5,7 +5,6 @@ import { useAlertStore } from './../store/alertStore';
 
 type PostOptions = {
     include_token?: boolean,
-    alert?: boolean,
     redirect?: Router | undefined
 };
 
@@ -17,36 +16,51 @@ type RequestOptions = {
     body?: string
 }
 
-type ResponseData = {
-    Users: {username: string, avatar: string}[],
+interface ResponseData {
     Alert?:{
         alert_msg: string,
         alert_type: string
-    },
+    };
     Redirect?: {
         redirect_url: string
-    },
-    Login?: {
-        token: string
-    },
-
-    username?: string,
-    avatar?: string,
-    email?: string,
-
-    Logout?: boolean,
-    activated?: boolean,
-    registration?: boolean
+    };
+    /*
+    Logout?: boolean;
+    activated?: boolean;
+    registration?: boolean;*/
 }
 
-/*type LoginResponse = {
+interface ResponseGetHeader extends ResponseData {
+    activated: boolean;
+    avatar: string;
+    registration: boolean;
+    username: string;
+}
 
-}*/
+interface ResponseLogin extends ResponseData {
+    Login: {
+        token: string
+    };
+}
 
-async function post(
+interface ResponseGetUsers extends ResponseData {
+    Users: {
+        username: string,
+        avatar: string
+    }[];
+}
+
+interface ResponseGetUser extends ResponseData {
+    username: string;
+    avatar: string;
+    activated: boolean;
+    email: string;
+}
+
+async function post<T>(
     type: string, input_object: any, api_endpoint: string,
-    {include_token = true, alert = true, redirect = undefined}: PostOptions = {})
-    : Promise<[number, ResponseData]> {
+    {include_token = true, redirect = undefined}: PostOptions = {})
+    : Promise<[number, T]> {
 
     const requestOptions: RequestOptions = {
         method: type,
@@ -75,7 +89,7 @@ async function post(
         useAlertStore().addAlert("alert-danger", "Connection error", 3000);
         throw "Connection Error";
     });
-    const data: ResponseData = await response.json().catch(error => {
+    const data = await response.json().catch(error => {
         console.log(response)
         console.log('There was an error!', error);
     });
@@ -84,21 +98,12 @@ async function post(
 
     //handle alerts
     if(data.Alert){
-        let duration = 3000;
-        if (alert) {
-            duration = 5000;
-            if (data.Alert.alert_type == "alert-success") {
-                duration = 2000;
-            } else if (data.Alert.alert_type == "alert-danger" || data.Alert.alert_type == "alert-info") {
-                duration = 200000;
-            }
-        }
-        useAlertStore().addAlert(data.Alert.alert_type, data.Alert.alert_msg, duration);
+        useAlertStore().addAlert(data.Alert.alert_type, data.Alert.alert_msg, 3000);
     }
 
     //handle Redirects
     if (redirect && data.Redirect){
-        console.log("Redirect",data);
+        console.log("Redirect",data.Redirect.redirect_url);
         redirect.push(data.Redirect.redirect_url);
     }
 
@@ -108,7 +113,7 @@ async function post(
         throw "Error during request!";
     }
 
-    return [response.status, data];
+    return [response.status, data] as [number, T];
 }
 
 async function get_avatar(avatar_name: string): Promise<string> {
@@ -126,5 +131,9 @@ async function get_avatar(avatar_name: string): Promise<string> {
 }
 
 export {
-    post, get_avatar
+    post, get_avatar,
+    ResponseGetHeader,
+    ResponseLogin,
+    ResponseGetUsers,
+    ResponseGetUser
 }
