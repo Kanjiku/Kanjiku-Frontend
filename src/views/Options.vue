@@ -7,7 +7,7 @@
                     <div class="form-group mb-4">
                         <label for="themeSelect" class="form-label">Theme</label>
                         <select class="form-select theme" v-model="currentTheme">
-                            <option v-for="theme in themes" :key="theme" :value="theme">{{ theme }}</option>
+                            <option v-for="theme in themeStore.themeNames" :key="theme" :value="theme">{{ theme }}</option>
                         </select>
                     </div>
                     <button @click.prevent="apply()" class="btn btn-primary">Apply</button>
@@ -19,15 +19,14 @@
 
 <script lang="ts" setup>
 import { ref, computed } from "vue";
-import { useStore, mapMutations } from "vuex";
+import { useThemeStore } from "@/store/themeStore";
 
-const store = useStore();
+const themeStore = useThemeStore();
 
-const themes = computed(() => store.getters.getThemes);
-let currentTheme = ref(localStorage.getItem("theme"));
+let currentTheme = ref(localStorage.getItem("theme") ?? "Slate");
 
 const apply = () => {
-    store.commit("setTheme", currentTheme.value);
+    themeStore.selectTheme(currentTheme.value);
 }
 </script>
 

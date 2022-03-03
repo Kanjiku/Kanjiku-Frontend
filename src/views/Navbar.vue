@@ -17,7 +17,7 @@
                     <li class="nav-item">
                         <router-link class="nav-link" :to="{name: 'Mangas'}">Manga</router-link>
                     </li>
-                    <li class="nav-item" v-if="store.getters.isLoggedIn">
+                    <li class="nav-item" v-if="statusStore.loggedIn">
                         <router-link class="nav-link" :to="{name: 'Users'}">Users</router-link>
                     </li>
                     <li class="nav-item">
@@ -34,7 +34,7 @@
                         </div>
                     </li>
                 </ul>
-                <ul class="navbar-nav" v-if="loggedIn">
+                <ul class="navbar-nav" v-if="statusStore.loggedIn">
                     <li class="nav-item">
                         <a class="nav-link" @click.prevent="logout()">Logout</a>
                     </li>
@@ -57,28 +57,27 @@
 
 <script lang="ts" setup>
 import { computed } from "vue";
-import { useStore } from "vuex";
+import { post } from "@/funcs/requests";
+import { useStatusStore } from "@/store/statusStore";
 import { useRouter } from "vue-router";
 import { removeCookie } from "tiny-cookie";
 
-const store = useStore();
+const statusStore = useStatusStore();
 const router = useRouter();
 
 
-const loggedIn = computed(() => store.getters.isLoggedIn);
 const logout = () => {
-    store.dispatch("post", ["GET", {}, 'logout', {alert: false, redirect: router}])
+    post("GET", {}, 'logout', {alert: false, redirect: router})
     .then(() => {
-        store.commit("setLoggedIn", false);
-        store.commit("setUsername", "");
+        statusStore.loggedIn = false;
+        statusStore.username = "";
         removeCookie("token");
     })
     .catch((_) => ({}));
 }
 
-const username = computed(() => store.getters.getUsername);
 const gotoProfile = () => {
-    router.push({ name: "User", params: {user: username.value}});
+    router.push({ name: "User", params: {user: statusStore.username}});
 }
 </script>
 

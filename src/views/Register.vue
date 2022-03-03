@@ -29,11 +29,12 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { useStore } from "vuex";
+import { post } from "@/funcs/requests";
+import { useStatusStore } from "@/store/statusStore";
 import { useRouter } from "vue-router";
 import { setCookie } from "tiny-cookie";
 
-const store = useStore();
+const statusStore = useStatusStore();
 const router = useRouter();
 
 
@@ -52,7 +53,7 @@ const register = () => {
         "email": email.value
     };
 
-    store.dispatch("post", ["POST",data,'register'])
+    post("POST",data,'register')
     .then(([status, response]) => {
         const loginData = {
             "action": "login",
@@ -61,11 +62,11 @@ const register = () => {
             "remember_me": false
         };
 
-        store.dispatch("post", ["POST",loginData,"login", {redirect: router}])
+        post("POST",loginData,"login", {redirect: router})
         .then(([status,response]) => {
             setCookie("token", response.Login.token, { expires: "1D" });
-            store.commit("setUsername", response.Redirect.redirect_url.slice(response.Redirect.redirect_url.lastIndexOf("/")+1));
-            store.commit("setLoggedIn", true);
+            statusStore.username = response.Redirect.redirect_url.slice(response.Redirect.redirect_url.lastIndexOf("/")+1);
+            statusStore.loggedIn = true;
         })
         .catch((_) => ({}));
     })

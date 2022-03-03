@@ -21,11 +21,12 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { useStore } from "vuex";
+import { post } from "@/funcs/requests";
+import { useStatusStore } from "@/store/statusStore";
 import { useRouter } from "vue-router";
 import { setCookie } from "tiny-cookie";
 
-const store = useStore();
+const statusStore = useStatusStore();
 const router = useRouter();
 
 let username = ref("");
@@ -39,14 +40,14 @@ const login = () => {
         "remember_me": false
     };
 
-    store.dispatch("post", ["POST", data, 'login', {alert: false, redirect: router}])
+    post("POST", data, 'login', {alert: false, redirect: router})
         .then(([_,response]) => {
-        setCookie("token", response.Login.token, { expires: "1D"});
-        store.commit("setUsername", username.value)
-        store.commit("setLoggedIn", true);
+            setCookie("token", response.Login.token, { expires: "1D"});
+            statusStore.username = username.value;
+            statusStore.loggedIn = true;
 
-        router.push({name:"User", params: {user: username.value}});
-    }).catch((_) => _);
+            router.push({name:"User", params: {user: username.value}});
+        }).catch((_) => _);
 }
 </script>
 

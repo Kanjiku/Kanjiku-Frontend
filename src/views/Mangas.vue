@@ -15,9 +15,6 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { useStore } from "vuex";
-
-const store = useStore();
 
 const mangas = ref({
     0: {

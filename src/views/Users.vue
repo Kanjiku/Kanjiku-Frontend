@@ -17,10 +17,11 @@
 
 <script lang="ts" setup>
 import { ref, Ref, watch, onMounted } from 'vue';
-import { useStore } from 'vuex';
+import { post, get_avatar } from "@/funcs/requests";
+import { useStatusStore } from "@/store/statusStore";
 import { useRouter } from 'vue-router';
 
-const store = useStore();
+const statusStore = useStatusStore();
 const router = useRouter();
 
 
@@ -34,12 +35,12 @@ type User = {
 const users: Ref<User[]> = ref([]);
 
 const getUsers = () => {
-    store.dispatch("post", ["GET", {}, "users"])
+    post("GET", {}, "users")
     .then(([status, response]) => {
         users.value = response.Users;
         for (const user of users.value) {
             user.loaded = false;
-            store.dispatch("get_avatar", user.avatar).then(url => {
+            get_avatar(user.avatar).then(url => {
                 user.url = url;
             });
         }
@@ -56,10 +57,10 @@ const revoke_url = (user: User) => {
 }
 
 onMounted(() => {
-    if (store.getters.isLoggedIn) {
+    if (statusStore.loggedIn) {
         getUsers();
     } else {
-        let loginWatcher = watch(() => store.getters.isLoggedIn, (b) => {
+        let loginWatcher = watch(() => statusStore.loggedIn, (b) => {
             console.log("loggedin", b);
             if (!b) return;
             getUsers();
