@@ -32,7 +32,7 @@ const router = useRouter();
 let username = ref("");
 let password = ref("");
 
-const login = () => {
+function login() {
     let data = {
         "action": "login",
         "password": password.value,
@@ -40,7 +40,7 @@ const login = () => {
         "remember_me": false
     };
 
-    post<ResponseLogin>("POST", data, 'login', {alert: false, redirect: router})
+    post<ResponseLogin>("POST", data, 'login', {redirect: router})
         .then(([_,response]) => {
             setCookie("token", response.Login.token, { expires: "1D"});
             statusStore.username = username.value;

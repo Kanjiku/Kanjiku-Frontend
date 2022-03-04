@@ -130,8 +130,15 @@ async function get_avatar(avatar_name: string): Promise<string> {
     });
 }
 
+function revoke_url(url: string | undefined): boolean {
+    if (!url) return false;
+    URL.revokeObjectURL(url);
+    return true;
+}
+
 export {
     post, get_avatar,
+    revoke_url,
     ResponseGetHeader,
     ResponseLogin,
     ResponseGetUsers,

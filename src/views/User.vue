@@ -4,7 +4,7 @@
             <h2>Profil von</h2>
             <h3>{{ name }}</h3>
             <div class="ratio mx-auto my-4" style="--bs-aspect-ratio: 100%" v-show="img_loaded">
-                <img class="avatar" :src="avatar_url" @load="revoke_url(avatar_url)">
+                <img class="avatar" :src="avatar_url" @load="img_loaded=revoke_url(avatar_url)">
             </div>
             <div v-show="email">
                 <h3>Email</h3>
@@ -17,7 +17,7 @@
 
 <script lang="ts" setup>
 import { ref, watch, onMounted } from "vue";
-import { post, get_avatar, ResponseGetUser } from "@/funcs/requests";
+import { post, get_avatar, revoke_url, ResponseGetUser } from "@/funcs/requests";
 import { useStatusStore } from "@/store/statusStore";
 import { useRoute, useRouter } from "vue-router";
 
@@ -30,13 +30,7 @@ let avatar_url = ref("");
 let img_loaded = ref(false);
 let email = ref("");
 
-const revoke_url = (url: string) => {
-    if (!avatar_url.value) return;
-    URL.revokeObjectURL(url);
-    img_loaded.value = true;
-}
-
-const getUserData = () => {
+function getUserData() {
     post<ResponseGetUser>("GET",{},"user/"+route.params.user, {redirect: router})
     .then(([status, response]) => {
         name.value = response.username;

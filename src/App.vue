@@ -1,6 +1,6 @@
 <template>
     <div class="main d-flex-column container-fluid p-0">
-        <Navbar class="mb-4" />
+        <Navbar />
         <Alerts />
         <router-view class="container col-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6 mt-sm-4 mb-4" />
     </div>
@@ -24,6 +24,7 @@ if (getCookie("token") ? true : false) {
             if (Math.floor(status / 100) != 2) return;
             statusStore.loggedIn = true;
             statusStore.username = response.username;
+            statusStore.avatar = response.avatar;
             statusStore.checked = true;
         }).catch((e) => {
             console.error(e);
@@ -35,8 +36,6 @@ if (getCookie("token") ? true : false) {
 }
 
 themeStore.initThemes();
-
-
 
 </script>
 

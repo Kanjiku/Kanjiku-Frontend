@@ -37,14 +37,13 @@ import { setCookie } from "tiny-cookie";
 const statusStore = useStatusStore();
 const router = useRouter();
 
-
 let username = ref("");
 let email = ref("");
 let password = ref("");
 let passwordconfirm = ref("");
 
 
-const register = () => {
+function register() {
     const data = {
         "action":"register",
         "password": password.value,
@@ -71,7 +70,7 @@ const register = () => {
         .catch((_) => ({}));
     })
     .catch((_) => ({}));
-};
+}
 </script>
 
 <style lang="scss" scoped>

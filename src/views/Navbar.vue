@@ -39,7 +39,9 @@
                         <a class="nav-link" @click.prevent="logout()">Logout</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" @click.prevent="gotoProfile()">Profile</a>
+                        <router-link class="nav-link" :to="{name: 'User', params: {user: statusStore.username}}">
+                            <img :src="avatar_url" @load="avatar_loaded = revoke_url(avatar_url)" v-show="avatar_loaded">
+                        </router-link>
                     </li>
                 </ul>
                 <ul class="navbar-nav" v-else>
@@ -56,8 +58,8 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
-import { post } from "@/funcs/requests";
+import { ref, watch } from "vue";
+import { post, get_avatar, revoke_url } from "@/funcs/requests";
 import { useStatusStore } from "@/store/statusStore";
 import { useRouter } from "vue-router";
 import { removeCookie } from "tiny-cookie";
@@ -65,24 +67,51 @@ import { removeCookie } from "tiny-cookie";
 const statusStore = useStatusStore();
 const router = useRouter();
 
+let avatar_url = ref("");
+let avatar_loaded = ref(false);
 
-const logout = () => {
+function logout() {
     post("GET", {}, 'logout', {redirect: router})
     .then(() => {
         statusStore.loggedIn = false;
         statusStore.username = "";
+        statusStore.avatar = "";
         removeCookie("token");
     })
     .catch((_) => ({}));
 }
 
-const gotoProfile = () => {
-    router.push({ name: "User", params: {user: statusStore.username}});
+function getAvatar() {
+    get_avatar(statusStore.avatar).then(url => {
+        avatar_url.value = url;
+    });
 }
+
+watch(() => statusStore.avatar, (_, b) => {
+    if (b) {
+        avatar_url.value = "";
+        avatar_loaded.value = false;
+    } else {
+        getAvatar();
+    }
+})
+
 </script>
 
 <style scoped lang="scss">
 .navbar-nav {
-    cursor: pointer;
+    align-items: center;
+    .nav-item {
+        > * {
+            cursor: pointer;
+        }
+
+        img {
+            max-height: 2.5rem;
+            margin-top: -2rem;
+            margin-bottom: -1.8rem;
+            padding-top: -1rem;
+        }
+    }
 }
 </style>

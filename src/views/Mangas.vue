@@ -44,7 +44,7 @@ const mangas = ref({
     }
 });
 
-const fetchManga = () => {
+function fetchManga() {
     // GET /mangas
 }
 fetchManga();
@@ -52,36 +52,32 @@ fetchManga();
 </script>
 
 <style scoped lang="scss">
-.mangas {
-    .manga-grid {
-        .manga {
-            cursor: pointer;            
-            .ratio::after {
-                content: "";
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background-color: #000;
-                opacity: 0;
-                transition: opacity .2s;
-            }
+.mangas > .manga-grid > .manga {
+    cursor: pointer;            
+    .ratio::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #000;
+        opacity: 0;
+        transition: opacity .2s;
+    }
 
-            p {
-                color: var(--bs-body-color);
-                transition: color .5s;
-            }
+    p {
+        color: var(--bs-body-color);
+        transition: color .5s;
+    }
 
-            &:hover {
-                .ratio::after {
-                    opacity: .5;
-                }
+    &:hover {
+        .ratio::after {
+            opacity: .5;
+        }
 
-                p {
-                    color: var(--bs-primary);
-                }
-            }
+        p {
+            color: var(--bs-primary);
         }
     }
 }

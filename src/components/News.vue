@@ -28,7 +28,7 @@ const articles: { [key: number]: Article } = {
 };
 let articleId = 1;
 
-const newArticle = (title: string, text: string) => {
+function newArticle(title: string, text: string) {
     articleId++;
     articles[articleId] = {
         title: title,

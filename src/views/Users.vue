@@ -6,7 +6,7 @@
                 <router-link class="user col-6 col-sm-4 col-md-3 text-decoration-none"
                 v-for="user in users" :key="user.username" :to="{name: 'User', params: {user: user.username}}" v-show="user.loaded">
                     <div class="ratio" style="--bs-aspect-ratio: 100%">
-                        <img class="avatar" :src="user.url" @load="revoke_url(user)">
+                        <img class="avatar" :src="user.url" @load="user.loaded = revoke_url(user.url ?? '')">
                     </div>
                     <p class="username my-2 text-center">{{ user.username }}</p>
                 </router-link>
@@ -17,7 +17,7 @@
 
 <script lang="ts" setup>
 import { ref, Ref, watch, onMounted } from 'vue';
-import { post, get_avatar, ResponseGetUsers } from "@/funcs/requests";
+import { post, get_avatar, revoke_url, ResponseGetUsers } from "@/funcs/requests";
 import { useStatusStore } from "@/store/statusStore";
 import { useRouter } from 'vue-router';
 
@@ -35,7 +35,7 @@ let loaded = ref(false);
 
 const users: Ref<User[]> = ref([]);
 
-const getUsers = () => {
+function getUsers() {
     post<ResponseGetUsers>("GET", {}, "users", {redirect: router})
     .then(([status, response]) => {
         users.value = response.Users;
@@ -50,12 +50,6 @@ const getUsers = () => {
     .catch((_) => {
         router.push({path:"/"});
     });
-}
-
-const revoke_url = (user: User) => {
-    if (!user.url) return;
-    URL.revokeObjectURL(user.url);
-    user.loaded = true;
 }
 
 onMounted(() => {

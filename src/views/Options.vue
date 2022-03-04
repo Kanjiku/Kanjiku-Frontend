@@ -25,7 +25,7 @@ const themeStore = useThemeStore();
 
 let currentTheme = ref(localStorage.getItem("theme") ?? "Slate");
 
-const apply = () => {
+function apply() {
     themeStore.selectTheme(currentTheme.value);
 }
 </script>
