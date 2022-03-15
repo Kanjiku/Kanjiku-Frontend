@@ -32,7 +32,7 @@ let email = ref("");
 
 function getUserData() {
     post<ResponseGetUser>("GET",{},"user/"+route.params.user, {redirect: router})
-    .then(([status, response]) => {
+    .then((response) => {
         name.value = response.username;
         email.value = response.email ?? "";
         

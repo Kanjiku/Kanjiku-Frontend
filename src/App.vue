@@ -20,8 +20,7 @@ const themeStore = useThemeStore();
 
 if (getCookie("token") ? true : false) {
     post<ResponseGetHeader>("GET", {}, "header")
-        .then(([status, response]) => {
-            if (Math.floor(status / 100) != 2) return;
+        .then((response) => {
             statusStore.loggedIn = true;
             statusStore.username = response.username;
             statusStore.avatar = response.avatar;
@@ -31,6 +30,12 @@ if (getCookie("token") ? true : false) {
             statusStore.checked = true;
             removeCookie("token")
         });
+    post("GET", {}, "perms")
+        .then((response) => {
+            //
+        }).catch((e) => {
+            console.error(e);
+        })
 } else {
     statusStore.checked = true;
 }
@@ -38,7 +43,6 @@ if (getCookie("token") ? true : false) {
 themeStore.initThemes();
 
 </script>
-
 
 <style scoped lang="scss">
 .main {

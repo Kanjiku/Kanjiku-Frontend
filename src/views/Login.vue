@@ -21,7 +21,7 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { post, ResponseLogin } from "@/funcs/requests";
+import { post, ResponseLogin, ResponseGetHeader } from "@/funcs/requests";
 import { useStatusStore } from "@/store/statusStore";
 import { useRouter } from "vue-router";
 import { setCookie } from "tiny-cookie";
@@ -41,10 +41,15 @@ function login() {
     };
 
     post<ResponseLogin>("POST", data, 'login', {redirect: router})
-        .then(([_,response]) => {
+        .then((response) => {
             setCookie("token", response.Login.token, { expires: "1D"});
             statusStore.username = username.value;
             statusStore.loggedIn = true;
+
+            post<ResponseGetHeader>("GET", {}, "header")
+            .then((response) => {
+                statusStore.avatar = response.avatar;
+            })
 
             router.push({name:"User", params: {user: username.value}});
         }).catch((_) => _);

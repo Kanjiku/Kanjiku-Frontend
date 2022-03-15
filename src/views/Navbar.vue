@@ -20,9 +20,6 @@
                     <li class="nav-item" v-if="statusStore.loggedIn">
                         <router-link class="nav-link" :to="{name: 'Users'}">Users</router-link>
                     </li>
-                    <li class="nav-item">
-                        <router-link class="nav-link" :to="{name: 'Options'}">Options</router-link>
-                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
                         <div class="dropdown-menu">
@@ -34,23 +31,28 @@
                         </div>
                     </li>
                 </ul>
-                <ul class="navbar-nav" v-if="statusStore.loggedIn">
+                <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" @click.prevent="logout()">Logout</a>
+                        <router-link class="nav-link" :to="{name: 'Options'}">Options</router-link>
                     </li>
-                    <li class="nav-item">
-                        <router-link class="nav-link" :to="{name: 'User', params: {user: statusStore.username}}">
-                            <img :src="avatar_url" @load="avatar_loaded = revoke_url(avatar_url)" v-show="avatar_loaded">
-                        </router-link>
-                    </li>
-                </ul>
-                <ul class="navbar-nav" v-else>
-                    <li class="nav-item">
-                        <router-link class="nav-link" :to="{name: 'Login'}">Login</router-link>
-                    </li>
-                    <li class="nav-item">
-                        <router-link class="nav-link" :to="{name: 'Register'}">Register</router-link>
-                    </li>
+                    <div v-if="statusStore.loggedIn" class="d-flex flex-row">
+                        <li class="nav-item">
+                            <a class="nav-link" @click.prevent="logout()">Logout</a>
+                        </li>
+                        <li class="nav-item">
+                            <router-link class="nav-link avatar" :to="{name: 'User', params: {user: statusStore.username}}">
+                                <img :src="avatar_url" @load="avatar_loaded = revoke_url(avatar_url)" v-show="avatar_loaded">
+                            </router-link>
+                        </li>
+                    </div>
+                    <div v-else class="d-flex flex-row">
+                        <li class="nav-item">
+                            <router-link class="nav-link" :to="{name: 'Login'}">Login</router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link class="nav-link" :to="{name: 'Register'}">Register</router-link>
+                        </li>
+                    </div>
                 </ul>
             </div>
         </div>
@@ -87,14 +89,14 @@ function getAvatar() {
     });
 }
 
-watch(() => statusStore.avatar, (_, b) => {
+watch(() => statusStore.avatar, (b) => {
     if (b) {
+        getAvatar();
+    } else {
         avatar_url.value = "";
         avatar_loaded.value = false;
-    } else {
-        getAvatar();
     }
-})
+}, {immediate: true});
 
 </script>
 
@@ -110,7 +112,7 @@ watch(() => statusStore.avatar, (_, b) => {
             max-height: 2.5rem;
             margin-top: -2rem;
             margin-bottom: -1.8rem;
-            padding-top: -1rem;
+            border-radius: 100%;
         }
     }
 }

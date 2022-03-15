@@ -5,7 +5,7 @@
             <form>
                 <fieldset>
                     <div class="form-group mb-4">
-                        <label for="themeSelect" class="form-label">Theme</label>
+                        <label class="form-label">Theme</label>
                         <select class="form-select theme" v-model="currentTheme">
                             <option v-for="theme in themeStore.themeNames" :key="theme" :value="theme">{{ theme }}</option>
                         </select>

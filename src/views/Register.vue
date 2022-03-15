@@ -53,7 +53,7 @@ function register() {
     };
 
     post("POST",data,'register')
-    .then(([status, response]) => {
+    .then((response) => {
         const loginData = {
             "action": "login",
             "password": data.password,
@@ -62,7 +62,7 @@ function register() {
         };
 
         post<ResponseLogin>("POST",loginData,"login", {redirect: router})
-        .then(([status,response]) => {
+        .then((response) => {
             setCookie("token", response.Login.token, { expires: "1D" });
             statusStore.username = data.username;
             statusStore.loggedIn = true;

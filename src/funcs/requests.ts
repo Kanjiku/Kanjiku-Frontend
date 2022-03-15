@@ -60,7 +60,7 @@ interface ResponseGetUser extends ResponseData {
 async function post<T>(
     type: string, input_object: any, api_endpoint: string,
     {include_token = true, redirect = undefined}: PostOptions = {})
-    : Promise<[number, T]> {
+    : Promise<T> {
 
     const requestOptions: RequestOptions = {
         method: type,
@@ -113,7 +113,7 @@ async function post<T>(
         throw "Error during request!";
     }
 
-    return [response.status, data] as [number, T];
+    return data as T;
 }
 
 async function get_avatar(avatar_name: string): Promise<string> {
