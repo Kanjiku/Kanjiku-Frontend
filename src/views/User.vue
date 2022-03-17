@@ -49,7 +49,10 @@ onMounted(() => {
     } else {
         let loginWatcher = watch(() => statusStore.loggedIn, (b) => {
             console.log("loggedin", b);
-            if (!b) return;
+            if (!b) {
+                router.push("/");
+                return;
+            }
             getUserData();
             loginWatcher();
         }, {immediate: true});

@@ -5,6 +5,9 @@ export const useStatusStore = defineStore("status", {
         loggedIn: false,
         username: "",
         avatar: "",
-        checked: false
+        checked: false,
+        perms: {
+            admin: false
+        }
     })
 });

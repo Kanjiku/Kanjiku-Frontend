@@ -21,6 +21,7 @@ const themeStore = useThemeStore();
 if (getCookie("token") ? true : false) {
     post<ResponseGetHeader>("GET", {}, "header")
         .then((response) => {
+            statusStore.perms.admin = response.admin;
             statusStore.loggedIn = true;
             statusStore.username = response.username;
             statusStore.avatar = response.avatar;
@@ -30,12 +31,6 @@ if (getCookie("token") ? true : false) {
             statusStore.checked = true;
             removeCookie("token")
         });
-    post("GET", {}, "perms")
-        .then((response) => {
-            //
-        }).catch((e) => {
-            console.error(e);
-        })
 } else {
     statusStore.checked = true;
 }

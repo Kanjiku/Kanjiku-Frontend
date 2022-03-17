@@ -31,10 +31,11 @@ interface ResponseData {
 }
 
 interface ResponseGetHeader extends ResponseData {
-    activated: boolean;
-    avatar: string;
-    registration: boolean;
+    admin: boolean;
     username: string;
+    avatar: string;
+    activated: boolean;
+    registration: boolean;
 }
 
 interface ResponseLogin extends ResponseData {

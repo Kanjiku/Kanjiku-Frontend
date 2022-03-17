@@ -78,6 +78,7 @@ function logout() {
         statusStore.loggedIn = false;
         statusStore.username = "";
         statusStore.avatar = "";
+        statusStore.perms.admin = false;
         removeCookie("token");
     })
     .catch((_) => ({}));
