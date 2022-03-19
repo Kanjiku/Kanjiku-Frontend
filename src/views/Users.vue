@@ -64,7 +64,7 @@ type User = {
 
 const users: Ref<User[]> = ref([]);
 
-let itemsPerPage = 1;
+let itemsPerPage = 12;
 let pageCount = ref(1);
 let pages: Ref<number[]> = ref([]);
 let curPage = ref(0);
@@ -135,7 +135,7 @@ function getUsers() {
             users.value.push(temp);
         }
         pageCount.value = Math.ceil(users.value.length/itemsPerPage);
-        for (let i = 0; i < itemsPerPage; i++) {
+        for (let i = 0; i < Math.min(users.value.length, itemsPerPage); i++) {
             users.value[i].status = 1;
             get_avatar(users.value[i].avatar).then(url => {
                 users.value[i].url = url;
@@ -155,12 +155,16 @@ onMounted(() => {
     if (statusStore.loggedIn) {
         getUsers();
     } else {
-        let loginWatcher = watch(() => statusStore.loggedIn, (b) => {
-            console.log("loggedIn",b);
+        let loginWatcher = watch(() => statusStore.checked, (b) => {
             if (!b) return;
+            console.log("loggedIn",b);
+            if (!statusStore.loggedIn) {
+                router.push("/");
+                return;
+            }
             getUsers();
             loginWatcher();
-        }, {immediate:true});
+        });
     }
 })
 </script>

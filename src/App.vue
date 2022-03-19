@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { post, ResponseGetHeader } from "@/funcs/requests";
+import { post, ResponseGetHeader, ResponseGetPerms } from "@/funcs/requests";
 import { useStatusStore } from "@/store/statusStore";
 import { useThemeStore } from "@/store/themeStore";
 import { getCookie, removeCookie } from "tiny-cookie";
@@ -21,10 +21,16 @@ const themeStore = useThemeStore();
 if (getCookie("token") ? true : false) {
     post<ResponseGetHeader>("GET", {}, "header")
         .then((response) => {
-            statusStore.perms.admin = response.admin;
             statusStore.loggedIn = true;
             statusStore.username = response.username;
             statusStore.avatar = response.avatar;
+            if (response.admin) {
+                statusStore.admin = response.admin;
+                post<ResponseGetPerms>("GET", {}, "perms")
+                .then(response => {
+                    statusStore.allPerms = response;
+                })
+            }
             statusStore.checked = true;
         }).catch((e) => {
             console.error(e);

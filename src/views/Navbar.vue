@@ -35,6 +35,9 @@
                     <li class="nav-item">
                         <router-link class="nav-link" :to="{name: 'Options'}">Options</router-link>
                     </li>
+                    <li class="nav-item" v-if="statusStore.admin">
+                        <router-link class="nav-link" :to="{name: 'Perms'}">Perms</router-link>
+                    </li>
                     <div v-if="statusStore.loggedIn" class="d-flex flex-row">
                         <li class="nav-item">
                             <a class="nav-link" @click.prevent="logout()">Logout</a>
@@ -78,7 +81,7 @@ function logout() {
         statusStore.loggedIn = false;
         statusStore.username = "";
         statusStore.avatar = "";
-        statusStore.perms.admin = false;
+        statusStore.admin = false;
         removeCookie("token");
     })
     .catch((_) => ({}));
@@ -97,7 +100,7 @@ watch(() => statusStore.avatar, (b) => {
         avatar_url.value = "";
         avatar_loaded.value = false;
     }
-}, {immediate: true});
+});
 
 </script>
 

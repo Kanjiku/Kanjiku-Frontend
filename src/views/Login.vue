@@ -49,7 +49,7 @@ function login() {
             post<ResponseGetHeader>("GET", {}, "header")
             .then((response) => {
                 statusStore.avatar = response.avatar;
-                statusStore.perms.admin = response.admin;
+                statusStore.admin = response.admin;
             })
 
             router.push({name:"User", params: {user: username.value}});

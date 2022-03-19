@@ -4,6 +4,7 @@ import Home from "@/views/Home.vue";
 import Mangas from "@/views/Mangas.vue";
 import Manga from "@/views/Manga.vue";
 import Options from "@/views/Options.vue";
+import Perms from "@/views/Perms.vue";
 import Login from "@/views/Login.vue";
 import Register from "@/views/Register.vue";
 import Users from "@/views/Users.vue";
@@ -25,6 +26,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/manga/:name",
         name: "Manga",
         component: Manga
+    },
+    {
+        path: "/perms",
+        name: "Perms",
+        component: Perms
     },
     {
         path: "/options",

@@ -55,8 +55,12 @@ interface ResponseGetUser extends ResponseData {
     username: string;
     avatar: string;
     activated: boolean;
-    email: string;
+    email?: string;
+    token?: {last_login: string, token: string, valid_for: string, valid_until: string};
+    perms?: string[];
 }
+
+type ResponseGetPerms = string[];
 
 async function post<T>(
     type: string, input_object: any, api_endpoint: string,
@@ -110,7 +114,6 @@ async function post<T>(
 
 
     if (Math.floor(response.status/100) != 2) {
-        console.log("throwing");
         throw "Error during request!";
     }
 
@@ -143,5 +146,6 @@ export {
     ResponseGetHeader,
     ResponseLogin,
     ResponseGetUsers,
-    ResponseGetUser
+    ResponseGetUser,
+    ResponseGetPerms
 }

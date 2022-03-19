@@ -1,10 +1,10 @@
 <template>
     <div class="news">
         <div class="d-flex justify-content-around">
-            <button class="btn btn-success my-3" v-if="statusStore.perms.admin" @click="initAddArticle()" ><i class="bi bi-plus-square"></i></button>
+            <button class="btn btn-success my-3" v-if="statusStore.admin" @click="initAddArticle()" ><i class="bi bi-plus-square"></i></button>
         </div>
         <div class="card mb-3" v-for="article in articles" :key="article.id">
-            <div class="position-absolute w-100 admin-btns d-flex justify-content-end" v-if="statusStore.perms.admin">
+            <div class="position-absolute w-100 admin-btns d-flex justify-content-end" v-if="statusStore.admin">
                 <button class="btn btn-success m-2" @click="initEditArticle(article)"><i class="bi bi-pencil"></i></button>
                 <button class="btn btn-danger m-2 ms-0" @click="deleteArticle(article.id)"><i class="bi bi-trash"></i></button>
             </div>
