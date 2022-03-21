@@ -24,8 +24,8 @@ if (getCookie("token") ? true : false) {
             statusStore.loggedIn = true;
             statusStore.username = response.username;
             statusStore.avatar = response.avatar;
+            statusStore.admin = response.admin;
             if (response.admin) {
-                statusStore.admin = response.admin;
                 post<ResponseGetPerms>("GET", {}, "perms")
                 .then(response => {
                     statusStore.allPerms = response;

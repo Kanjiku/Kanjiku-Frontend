@@ -29,10 +29,11 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { post, ResponseLogin, ResponseGetHeader } from "@/funcs/requests";
+import { post, ResponseLogin, ResponseGetHeader, ResponseGetPerms } from "@/funcs/requests";
 import { useStatusStore } from "@/store/statusStore";
 import { useRouter } from "vue-router";
 import { setCookie } from "tiny-cookie";
+import { stat } from "fs";
 
 const statusStore = useStatusStore();
 const router = useRouter();
@@ -51,7 +52,6 @@ function register() {
         "username": username.value,
         "email": email.value
     };
-
     post("POST",data,'register')
     .then((response) => {
         const loginData = {
@@ -61,6 +61,7 @@ function register() {
             "remember_me": false
         };
 
+        statusStore.checked = false;
         post<ResponseLogin>("POST",loginData,"login", {redirect: router})
         .then((response) => {
             setCookie("token", response.Login.token, { expires: "1D" });
@@ -70,10 +71,19 @@ function register() {
             post<ResponseGetHeader>("GET", {}, "header")
             .then((response) => {
                 statusStore.avatar = response.avatar;
-                statusStore.perms.admin = response.admin;
+                statusStore.admin = response.admin;
+                if (response.admin) {
+                    post<ResponseGetPerms>("GET", {}, "perms")
+                    .then(response => {
+                        statusStore.allPerms = response;
+                    })
+                }
             })
+            statusStore.checked = true;
         })
-        .catch((_) => ({}));
+        .catch((_) => {
+            statusStore.checked = true;
+        });
     })
     .catch((_) => ({}));
 }

@@ -21,7 +21,7 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { post, ResponseLogin, ResponseGetHeader } from "@/funcs/requests";
+import { post, ResponseLogin, ResponseGetHeader, ResponseGetPerms } from "@/funcs/requests";
 import { useStatusStore } from "@/store/statusStore";
 import { useRouter } from "vue-router";
 import { setCookie } from "tiny-cookie";
@@ -40,6 +40,7 @@ function login() {
         "remember_me": false
     };
 
+    statusStore.checked = false;
     post<ResponseLogin>("POST", data, 'login', {redirect: router})
         .then((response) => {
             setCookie("token", response.Login.token, { expires: "1D"});
@@ -50,10 +51,18 @@ function login() {
             .then((response) => {
                 statusStore.avatar = response.avatar;
                 statusStore.admin = response.admin;
+                if (response.admin) {
+                    post<ResponseGetPerms>("GET", {}, "perms")
+                    .then(response => {
+                        statusStore.allPerms = response;
+                    })
+                }
             })
-
+            statusStore.checked = true;
             router.push({name:"User", params: {user: username.value}});
-        }).catch((_) => _);
+        }).catch((_) => {
+            statusStore.checked = true;
+        });
 }
 </script>
 

@@ -89,7 +89,7 @@ async function post<T>(
         requestOptions.body = JSON.stringify(input_object);
     }
 
-    const url = window.location.protocol+"//"+window.location.hostname+":8000"+"/"+api_endpoint;
+    const url = window.location.protocol+"//"+window.location.hostname+":8000/"+api_endpoint;
     const response = await fetch(url, requestOptions).catch(() => {
         useAlertStore().addAlert("alert-danger", "Connection error", 3000);
         throw "Connection Error";
