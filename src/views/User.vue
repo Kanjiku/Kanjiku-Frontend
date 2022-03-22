@@ -10,10 +10,10 @@
                     <img class="avatar" :src="avatar_url" @load="img_loaded=revoke_url(avatar_url)">
                 </div>
             </div>
-            <div class="edit order-3 col-md-6 text-center text-md-center ps-md-5 align-self-center" v-if="!editMode && (statusStore.admin || statusStore.username == name)">   
-                <button class="btn btn-primary" @click="initEdit()">Edit Profile</button>
+            <div class="edit order-3 col-md-6 text-center text-md-center ps-md-5 align-self-center">   
+                <button class="btn btn-primary" v-if="!editMode && (statusStore.admin || statusStore.username == name)" @click="initEdit()">Edit Profile</button>
             </div>
-            <div class="perms order-4 col-11 col-md-12 ps-md-5 mt-3 mb-4" v-if="statusStore.admin">
+            <div class="perms order-3 col-11 col-md-12 ps-md-5 mt-3 mb-4" v-if="statusStore.admin">
                 <h3 class="text-md-start">Perms</h3>
                 <div class="form-check">
                     <div class="text-start ps-2" v-for="(perm) in statusStore.allPerms" :key="perm">
@@ -31,6 +31,9 @@
                 </div>
             </div>
             <div v-else class="order-3 col-12 ps-md-5">
+                <div class="text-center text-md-end">
+                    <button class="btn btn-danger" @click.exact="modalDelete = true" @click.shift.exact="deleteUser()">Delete User</button>
+                </div>
                 <form>
                     <fieldset>
                         <!--<div class="form-group mb-3">
@@ -55,6 +58,26 @@
                 </form>
             </div>
         </div>
+        <div class="modal fade show" :class="{'d-block':modalDelete}" role="dialog" v-show="modalDelete">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Delete User</h5>
+                        <button type="button" class="btn-close" @click="modalDelete = false" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete this user? The data can't be recovered!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" @click="deleteUser()">Delete User</button>
+                        <button type="button" class="btn btn-secondary ms-2" @click="modalDelete = false">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-backdrop fade show" v-show="modalDelete"></div>
     </div>
 </template>
 
@@ -79,6 +102,13 @@ let editMode = ref(false);
 let editEmail = ref("");
 let editPassword = ref("");
 let editPasswordconfirm = ref("");
+
+let modalDelete = ref(false);
+
+function deleteUser() {
+    console.log("Delete user '"+name.value+"'");
+    router.push("/");
+}
 
 function initEdit() {
     if (!(statusStore.admin || (name.value == statusStore.username))) return;

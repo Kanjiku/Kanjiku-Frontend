@@ -31,7 +31,7 @@ npm run build
 - Registration / Login / Logout
 - Switching themes
 - Showing all users (with pagination)
-- Show/Edit basic user data
+- Show/Edit/Delete basic user
 - Show/Add/Delete perms
 
 # TODO

@@ -13,50 +13,61 @@
                 <p style="white-space:pre-line;" class="card-text">{{ article.text }}</p>
             </div>
         </div>
-        
-        <div class="new-article popup m-0 p-0" v-if="popupState == -1">
-            <div class=" container col-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6 m-0 p-0">
-                <h2 class="popup-title px-3 py-4">
-                    New Article
-                </h2>
-                <div class="popup-body px-3 pb-1 pt-2">
-                    <div class="form-group mb-3">
-                        <label for="title" class="form-label">Title</label>
-                        <input type="text" class="form-control" id="title" placeholder="Title" v-model="popupTitle">
+
+        <div class="modal fade show" :class="{'d-block':popupState == -1}" role="dialog" v-show="popupState == -1">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Create Article</h5>
+                        <button type="button" class="btn-close" @click="exitPopup()" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
                     </div>
-                    <div class="form-group mb-3">
-                        <label for="text" class="form-label">Text</label>
-                        <textarea class="form-control" id="text" placeholder="Text" rows="8" v-model="popupText"></textarea>
+                        <div class="modal-body">
+                            <div class="form-group mb-3">
+                            <label for="title" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="title" placeholder="Title" v-model="popupTitle">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="text" class="form-label">Text</label>
+                            <textarea class="form-control" id="text" placeholder="Text" rows="8" v-model="popupText"></textarea>
+                        </div>
                     </div>
-                </div>
-                <div class="popup-buttons px-3 pt-3 pb-3">
-                    <button type="button" class="btn btn-primary" @click="addArticle()">Add Article</button>
-                    <button type="button" class="btn btn-secondary ms-2" @click="exitPopup()">Close</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" @click="addArticle()">Create Article</button>
+                        <button type="button" class="btn btn-secondary ms-2" @click="exitPopup()">Cancel</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="new-article popup m-0 p-0" v-if="popupState >= 0">
-            <div class=" container col-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6 m-0 p-0">
-                <h2 class="popup-title px-3 py-4">
-                    Edit Article
-                </h2>
-                <div class="popup-body px-3 pb-1 pt-2">
-                    <div class="form-group mb-3">
-                        <label for="title" class="form-label">Title</label>
-                        <input type="text" class="form-control" id="title" placeholder="Title" v-model="popupTitle">
+        <div class="modal fade show" :class="{'d-block':popupState >= 0}" role="dialog" v-show="popupState >= 0">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Article</h5>
+                        <button type="button" class="btn-close" @click="exitPopup()" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
                     </div>
-                    <div class="form-group mb-3">
-                        <label for="text" class="form-label">Text</label>
-                        <textarea class="form-control" id="text" placeholder="Text" rows="8" v-model="popupText"></textarea>
+                        <div class="modal-body">
+                            <div class="form-group mb-3">
+                            <label for="title" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="title" placeholder="Title" v-model="popupTitle">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="text" class="form-label">Text</label>
+                            <textarea class="form-control" id="text" placeholder="Text" rows="8" v-model="popupText"></textarea>
+                        </div>
                     </div>
-                </div>
-                <div class="popup-buttons px-3 pt-3 pb-3">
-                    <button type="button" class="btn btn-primary" @click="editArticle()">Edit Article</button>
-                    <button type="button" class="btn btn-secondary ms-2" @click="exitPopup()">Close</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" @click="editArticle()">Edit Article</button>
+                        <button type="button" class="btn btn-secondary ms-2" @click="exitPopup()">Cancel</button>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="modal-backdrop fade show" v-show="popupState != -2"></div>
     </div>
 </template>
 
@@ -140,25 +151,5 @@ function deleteArticle(id: number) {
 </script>
 
 <style scoped lang="scss">
-.popup {
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    display:flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    margin: auto;
-    background-color: rgba(0,0,0,.5);
-    
-    > div {
-        background-color: var(--bs-secondary);
-        .popup-title, .popup-buttons {
-            background-color: rgba(0,0,0,.2);
-        }
-    }
 
-}
 </style>
