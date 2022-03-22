@@ -54,42 +54,14 @@ themeStore.initThemes();
     margin-bottom: 2rem;
 }
 
-.popup {
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    display:flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    margin: auto;
-    background-color: rgba(0,0,0,.5);
-    
-    > div {
-        background-color: var(--bs-secondary);
-        .popup-title, .popup-buttons {
-            background-color: rgba(0,0,0,.2);
-        }
-    }
-
+.modal-enter-active,
+.modal-leave-active {
+    transition: all 0.2s ease-in-out;
 }
 
-.modal-mask {
-    position: fixed;
-    z-index: 9998;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, .5);
-    display: table;
-    transition: opacity .3s ease;
-}
-
-.modal-wrapper {
-    display: table-cell;
-    vertical-align: middle;
+.modal-enter-from,
+.modal-leave-to {
+    transform: translate(0, -25%);
+    opacity: 0;
 }
 </style>

@@ -21,11 +21,9 @@
                         <router-link class="nav-link" :to="{name: 'Users'}">Users</router-link>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
+                            <router-link class="dropdown-item" :to="{name: 'Perms'}">Perms</router-link>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">Separated link</a>
                         </div>
@@ -34,9 +32,6 @@
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <router-link class="nav-link" :to="{name: 'Options'}">Options</router-link>
-                    </li>
-                    <li class="nav-item" v-if="statusStore.admin">
-                        <router-link class="nav-link" :to="{name: 'Perms'}">Perms</router-link>
                     </li>
                     <div v-if="statusStore.loggedIn" class="d-flex flex-row">
                         <li class="nav-item">
@@ -117,6 +112,8 @@ watch(() => statusStore.avatar, (b) => {
             margin-top: -2rem;
             margin-bottom: -1.8rem;
             border-radius: 100%;
+            overflow: hidden;
+            image-rendering: crisp-edges;
         }
     }
 }

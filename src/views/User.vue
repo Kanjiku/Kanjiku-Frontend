@@ -41,6 +41,10 @@
                             <input type="text" class="form-control" id="username" placeholder="Username" v-model="editName">
                         </div>-->
                         <div class="form-group mb-3"> 
+                            <label class="form-label" for="avatar">Avatar</label>
+                            <input type="file" class="form-control" id="avatar" accept="image/*" ref="avatarRef">
+                        </div>
+                        <div class="form-group mb-3"> 
                             <label for="email" class="form-label">Email</label>
                             <input type="text" class="form-control" id="email" placeholder="Email" v-model="editEmail">
                         </div>
@@ -58,32 +62,34 @@
                 </form>
             </div>
         </div>
-        <div class="modal fade show" :class="{'d-block':modalDelete}" role="dialog" v-show="modalDelete">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Delete User</h5>
-                        <button type="button" class="btn-close" @click="modalDelete = false" aria-label="Close">
-                            <span aria-hidden="true"></span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Are you sure you want to delete this user? The data can't be recovered!</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" @click="deleteUser()">Delete User</button>
-                        <button type="button" class="btn btn-secondary ms-2" @click="modalDelete = false">Cancel</button>
+        <Transition name="modal">
+            <div class="modal fade show" :class="{'d-block':modalDelete}" role="dialog" v-show="modalDelete">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Delete User</h5>
+                            <button type="button" class="btn-close" @click="modalDelete = false" aria-label="Close">
+                                <span aria-hidden="true"></span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete this user? The data can't be recovered!</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" @click="deleteUser()">Delete User</button>
+                            <button type="button" class="btn btn-secondary ms-2" @click="modalDelete = false">Cancel</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </Transition>
         <div class="modal-backdrop fade show" v-show="modalDelete"></div>
     </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, reactive, watch, onMounted } from "vue";
-import { post, get_avatar, revoke_url, ResponseGetUser, ResponseGetPerms } from "@/funcs/requests";
+import { post, get_avatar, revoke_url, ResponseGetUser } from "@/funcs/requests";
 import { useStatusStore } from "@/store/statusStore";
 import { useRoute, useRouter } from "vue-router";
 
@@ -98,15 +104,34 @@ let email = ref("");
 let perms: {[key: string] : boolean} = reactive({});
 let editMode = ref(false);
 
+let avatarRef = ref<HTMLInputElement>();
+
 //let editName = ref("");
 let editEmail = ref("");
 let editPassword = ref("");
 let editPasswordconfirm = ref("");
+let editAvatar;
 
 let modalDelete = ref(false);
 
+function toBase64(file: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsBinaryString(file)
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = error => reject(error);
+    });
+}
+
+async function handleAvatar(): Promise<string | null> {
+    if (!avatarRef?.value?.files) return null;
+    const reee = await toBase64(avatarRef.value.files[0])
+    return window.btoa(reee);
+}
+
 function deleteUser() {
     console.log("Delete user '"+name.value+"'");
+    post("DELETE", {}, "user/"+name.value);
     router.push("/");
 }
 
@@ -119,7 +144,8 @@ function initEdit() {
     editMode.value = true;
 }
 
-function saveChanges() {
+async function saveChanges() {
+
     //name.value = editName.value;
     email.value = editEmail.value;
     let data: {[key: string]: any} = {email: email.value, perms: {}};
@@ -128,6 +154,11 @@ function saveChanges() {
     }
     if (editPasswordconfirm.value.length > 0) {
         data.passwordconfirm = editPasswordconfirm.value;
+    }
+    const avatar = await handleAvatar();
+    console.log(avatar);
+    if (avatar !== null) {
+        data.img = avatar;
     }
 
     post("PUT", data, "user/"+route.params.user)
@@ -194,5 +225,8 @@ watch(() => route.params.user, () => {
 <style scoped lang="scss">
 .ratio {
     max-width: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+    image-rendering: crisp-edges;
 }
 </style>

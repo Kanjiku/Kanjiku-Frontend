@@ -9,7 +9,7 @@
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="6">6</option>
-                        <option value="12">12</option>
+                        <option selected="true" value="12">12</option>
                         <option value="24">24</option>
                         <option value="40">40</option>
                         <option value="100">100</option>
@@ -178,6 +178,8 @@ onMounted(() => {
 .avatar {
     cursor: pointer;
     border-radius: 100%;
+    overflow: hidden;
+    image-rendering: crisp-edges;
 }
 .username {
     cursor: pointer;
