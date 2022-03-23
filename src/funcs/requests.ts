@@ -24,10 +24,6 @@ interface ResponseData {
     Redirect?: {
         redirect_url: string
     };
-    /*
-    Logout?: boolean;
-    activated?: boolean;
-    registration?: boolean;*/
 }
 
 interface ResponseGetHeader extends ResponseData {
@@ -58,6 +54,10 @@ interface ResponseGetUser extends ResponseData {
     email?: string;
     token?: {last_login: string, token: string, valid_for: string, valid_until: string};
     perms?: string[];
+}
+
+interface ResponseDeleteUser extends ResponseData {
+    Logout?: boolean;
 }
 
 type ResponseGetPerms = string[];
@@ -147,5 +147,6 @@ export {
     ResponseLogin,
     ResponseGetUsers,
     ResponseGetUser,
+    ResponseDeleteUser,
     ResponseGetPerms
 }

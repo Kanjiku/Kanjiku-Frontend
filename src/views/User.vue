@@ -1,16 +1,16 @@
 <template>
     <div class="user">
         <div class="row justify-content-around">
-            <div class="name col-11 order-1 col-md-3 order-md-2 text-center text-md-start align-self-center">
+            <div class="name col-11 order-1 col-md-4 order-md-2 text-center text-md-start align-self-center">
                 <h2>Profil von</h2>
                 <h3>{{ name }}</h3>
             </div>
             <div class="image col-11 order-2 col-md-3 order-md-1">
-                <div class="ratio mx-auto my-4" style="--bs-aspect-ratio: 100%" v-show="img_loaded">
-                    <img class="avatar" :src="avatar_url" @load="img_loaded=revoke_url(avatar_url)">
+                <div class="ratio mx-auto my-4" style="--bs-aspect-ratio: 100%">
+                    <img class="avatar" :src="avatar_url" @load="avatar_loaded=revoke_url(avatar_url)" v-show="avatar_loaded">
                 </div>
             </div>
-            <div class="edit order-3 col-md-6 text-center text-md-center ps-md-5 align-self-center">   
+            <div class="edit order-3 col-md-5 text-center text-md-center ps-md-5 align-self-center">   
                 <button class="btn btn-primary" v-if="!editMode && (statusStore.admin || statusStore.username == name)" @click="initEdit()">Edit Profile</button>
             </div>
             <div class="perms order-3 col-11 col-md-12 ps-md-5 mt-3 mb-4" v-if="statusStore.admin">
@@ -89,9 +89,10 @@
 
 <script lang="ts" setup>
 import { ref, reactive, watch, onMounted } from "vue";
-import { post, get_avatar, revoke_url, ResponseGetUser } from "@/funcs/requests";
+import { post, get_avatar, revoke_url, ResponseGetUser, ResponseDeleteUser } from "@/funcs/requests";
 import { useStatusStore } from "@/store/statusStore";
 import { useRoute, useRouter } from "vue-router";
+import { removeCookie } from "tiny-cookie";
 
 const statusStore = useStatusStore();
 const route = useRoute();
@@ -99,7 +100,7 @@ const router = useRouter();
 
 let name = ref("");
 let avatar_url = ref("");
-let img_loaded = ref(false);
+let avatar_loaded = ref(false);
 let email = ref("");
 let perms: {[key: string] : boolean} = reactive({});
 let editMode = ref(false);
@@ -124,15 +125,24 @@ function toBase64(file: Blob): Promise<string> {
 }
 
 async function handleAvatar(): Promise<string | null> {
-    if (!avatarRef?.value?.files) return null;
+    if (!avatarRef?.value?.files?.length) return null;
+    console.log(avatarRef.value.files);
     const reee = await toBase64(avatarRef.value.files[0])
     return window.btoa(reee);
 }
 
 function deleteUser() {
     console.log("Delete user '"+name.value+"'");
-    post("DELETE", {}, "user/"+name.value);
-    router.push("/");
+    post<ResponseDeleteUser>("DELETE", {}, "user/"+name.value, {redirect: router})
+    .then(response => {
+        if (response.Logout) {
+            statusStore.loggedIn = false;
+            statusStore.username = "";
+            statusStore.avatar = "";
+            statusStore.admin = false;
+            removeCookie("token");
+        }
+    });
 }
 
 function initEdit() {
@@ -156,14 +166,38 @@ async function saveChanges() {
         data.passwordconfirm = editPasswordconfirm.value;
     }
     const avatar = await handleAvatar();
-    console.log(avatar);
-    if (avatar !== null) {
+    if (avatar != null) {
         data.img = avatar;
+        //watcher only gets triggered if value changes. Not if the value is just set.
+        if (name.value == statusStore.username) {
+            statusStore.avatar = "";
+        }
     }
 
     post("PUT", data, "user/"+route.params.user)
     .then(response => {
         editMode.value = false;
+        post<ResponseGetUser>("GET",{},"user/"+route.params.user, {redirect: router})
+        .then((response) => {
+            name.value = response.username;
+            email.value = response.email ?? "";
+            
+            //real trigger of watcher
+            if (name.value == statusStore.username) {
+                statusStore.avatar = response.avatar;
+            }
+            get_avatar(response.avatar).then(url => {
+                avatar_url.value = url;
+            })
+
+            if (statusStore.admin && response.perms) {
+                if (statusStore.allPerms.length > 0) {
+                    for (const p of statusStore.allPerms) {
+                        perms[p] = response.perms.includes(p);
+                    }
+                }
+            }
+        });
     });
 }
 
