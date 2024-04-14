@@ -1,40 +1,38 @@
-# Introduction
+# create-svelte
 
-This is the frontend for a scanlation site.\
-using VueJS 3 composition-api typescript
+Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
 
-# Installation
+## Creating a project
 
-## Requirements
-- node
-- backend
+If you're seeing this, you've probably already done this step. Congrats!
 
-# Running it
+```bash
+# create a new project in the current directory
+npm create svelte@latest
 
-## Project setup
-```
-npm install
+# create a new project in my-app
+npm create svelte@latest my-app
 ```
 
-### Compiles and hot-reloads for development
-```
+## Developing
+
+Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+
+```bash
 npm run dev
+
+# or start the server and open the app in a new browser tab
+npm run dev -- --open
 ```
 
-### Compiles and minifies for production
-```
+## Building
+
+To create a production version of your app:
+
+```bash
 npm run build
 ```
 
-# Features
+You can preview the production build with `npm run preview`.
 
-- Registration / Login / Logout
-- Switching themes
-- Showing all users (with pagination)
-- Show/Edit/Delete basic user
-- Show/Add/Delete perms
-
-# TODO
-- a lot
-
-
+> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
