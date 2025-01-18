@@ -4,7 +4,7 @@ import Popular from "@/components/Popular.vue";
 </script>
 
 <template>
-	<div class="home container-lg">
+	<div class="home container-lg py-4">
 		<News />
 		<Popular />
 	</div>

@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 
 export const use_theme_store = defineStore("theme", () => {
 	const theme_names = ["Slate", "Darkly", "Superhero", "Yeti", "Pulse", "Minty"];
 	let themes: {
 		[key: string]: HTMLLinkElement
-	} = {};
+	} = reactive({});
 	let loading = ref(true);
 
 	function preload_theme(href: string) {
@@ -29,6 +29,7 @@ export const use_theme_store = defineStore("theme", () => {
 	}
 
 	function select_theme(name: string) {
+		console.log(`Selecting theme '${name}'`)
 		if (name == null || !(name in themes)) {
 			throw new Error(`Theme '${name}' is not available`);
 		}
@@ -48,7 +49,11 @@ export const use_theme_store = defineStore("theme", () => {
 	}
 
 	function get_current() {
-		return Object.keys(themes).find(e => !themes[e].disabled);
+		return Object.keys(themes).find(e => !themes[e].disabled) ?? "";
+	}
+
+	function get_current_instant() {
+		return localStorage.getItem("theme") ?? "";
 	}
 
 	function get_all() {
@@ -69,7 +74,13 @@ export const use_theme_store = defineStore("theme", () => {
 		Promise.all(loading_arr).then(() => {
 			loading.value = false;
 
-			console.log("Finished preloading all themes");
+			console.log("Finished preloading themes");
+
+			const saved_theme = localStorage.getItem("theme");
+			if (saved_theme !== null && saved_theme !== undefined && saved_theme in themes) {
+				select_theme(saved_theme);
+				return;
+			} 
 
 			for (let name of theme_names) {
 				if (name in themes) {
@@ -85,6 +96,9 @@ export const use_theme_store = defineStore("theme", () => {
 		loading,
 		init_themes,
 		select_theme,
-		get_all
+		get_all,
+		get_current,
+		get_current_instant,
+		has
 	};
 });
