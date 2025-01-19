@@ -1,4 +1,32 @@
 <script setup lang="ts">
+import {useI18n} from 'vue-i18n';
+
+const {t} = useI18n({
+	legacy: false,
+	locale: "de",
+	fallbackLocale: "en",
+	messages: {
+		de: {
+			home: "Home",
+			latest: "Neueste",
+			projects: "Projekte",
+			options: "Optionen",
+			search: "Suchen",
+			login: "Einloggen",
+			signup: "Registrieren"
+		},
+		en: {
+			home: "Home",
+			latest: "Latest",
+			projects: "Projects",
+			options: "Options",
+			search: "Search",
+			login: "Login",
+			signup: "Signup"
+		}
+	}
+})
+
 </script>
 
 <template>
@@ -11,16 +39,16 @@
 			<div class="collapse navbar-collapse" id="navbarColor01">
 				<ul class="navbar-nav me-auto">
 					<li class="nav-item">
-						<RouterLink to="/" class="nav-link" activeClass="active">Home</RouterLink>
+						<RouterLink to="/" class="nav-link" activeClass="active">{{t("home")}}</RouterLink>
 					</li>
 					<li class="nav-item">
-						<RouterLink to="/releases" class="nav-link" activeClass="active">Releases</RouterLink>
+						<RouterLink to="/latest" class="nav-link" activeClass="active">{{t("latest")}}</RouterLink>
 					</li>
 					<li class="nav-item">
-						<RouterLink to="/projects" class="nav-link" activeClass="active">Projects</RouterLink>
+						<RouterLink to="/projects" class="nav-link" activeClass="active">{{t("projects")}}</RouterLink>
 					</li>
 					<li class="nav-item">
-						<RouterLink to="/options" class="nav-link" activeClass="active">Options</RouterLink>
+						<RouterLink to="/options" class="nav-link" activeClass="active">{{t("options")}}</RouterLink>
 					</li>
 					<!--<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
@@ -33,10 +61,14 @@
 						</div>
 					</li>-->
 				</ul>
-				<form class="d-flex">
-					<input class="form-control me-sm-2" type="search" placeholder="Search">
-					<button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-				</form>
+				<ul class="navbar-nav">
+					<li class="nav-item">
+						<RouterLink to="/login" class="nav-link" activeClass="active">{{t("login")}}</RouterLink>
+					</li>
+					<li class="nav-item">
+						<RouterLink to="/signup" class="nav-link" activeClass="active">{{t("signup")}}</RouterLink>
+					</li>
+				</ul>
 			</div>
 		</div>
 	</nav>

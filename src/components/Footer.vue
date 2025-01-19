@@ -1,5 +1,5 @@
 <template>
-	<div class="footer w-100 bg-primary d-flex flex-row">
+	<div class="footer w-100 d-flex flex-row">
 		Footer
 	</div>
 </template>

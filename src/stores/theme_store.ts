@@ -29,14 +29,12 @@ export const use_theme_store = defineStore("theme", () => {
 	}
 
 	function select_theme(name: string) {
-		console.log(`Selecting theme '${name}'`)
 		if (name == null || !(name in themes)) {
 			throw new Error(`Theme '${name}' is not available`);
 		}
 
 		for (let key of Object.keys(themes)) {
 			if ((name == key) == !!themes[key].disabled) {
-				console.log(key, (name != key));
 				themes[key].disabled = (name != key);
 			}
 		}
@@ -74,8 +72,6 @@ export const use_theme_store = defineStore("theme", () => {
 		Promise.all(loading_arr).then(() => {
 			loading.value = false;
 
-			console.log("Finished preloading themes");
-
 			const saved_theme = localStorage.getItem("theme");
 			if (saved_theme !== null && saved_theme !== undefined && saved_theme in themes) {
 				select_theme(saved_theme);
@@ -84,7 +80,6 @@ export const use_theme_store = defineStore("theme", () => {
 
 			for (let name of theme_names) {
 				if (name in themes) {
-					console.log(name);
 					select_theme(name);
 					break;
 				}
