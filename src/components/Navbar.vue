@@ -1,31 +1,7 @@
 <script setup lang="ts">
 import {useI18n} from 'vue-i18n';
 
-const {t} = useI18n({
-	legacy: false,
-	locale: "de",
-	fallbackLocale: "en",
-	messages: {
-		de: {
-			home: "Home",
-			latest: "Neueste",
-			projects: "Projekte",
-			options: "Optionen",
-			search: "Suchen",
-			login: "Einloggen",
-			signup: "Registrieren"
-		},
-		en: {
-			home: "Home",
-			latest: "Latest",
-			projects: "Projects",
-			options: "Options",
-			search: "Search",
-			login: "Login",
-			signup: "Signup"
-		}
-	}
-})
+const {t} = useI18n()
 
 </script>
 

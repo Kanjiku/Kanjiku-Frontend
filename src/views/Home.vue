@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import HomeLatest from "@/components/HomeLatest.vue";
 import News from "@/components/News.vue";
 import Popular from "@/components/Popular.vue";
 </script>
@@ -7,6 +8,7 @@ import Popular from "@/components/Popular.vue";
 	<div class="home container-lg py-4">
 		<News />
 		<Popular />
+		<HomeLatest />
 	</div>
 </template>
 

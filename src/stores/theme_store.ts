@@ -1,24 +1,45 @@
 import { defineStore } from "pinia";
 import { ref, reactive } from "vue";
 
+type Theme = {
+	name: string;
+	dark: boolean;
+	loaded: boolean;
+	link?: HTMLLinkElement;
+}
+
 export const use_theme_store = defineStore("theme", () => {
-	const theme_names = ["Slate", "Darkly", "Superhero", "Yeti", "Pulse", "Minty"];
-	let themes: {
-		[key: string]: HTMLLinkElement
-	} = reactive({});
+	const themes: {[key: string]: Theme} = reactive({});
+	function add_theme(name: string, dark: boolean = true) {
+		themes[name] = {
+			name, dark,
+			loaded: false
+		};
+	}
+
+	add_theme("Slate");
+	add_theme("Darkly");
+	add_theme("Superhero");
+	add_theme("Yeti", false);
+	add_theme("Pulse", false);
+	add_theme("Minty", false);
 	let loading = ref(true);
 
-	function preload_theme(href: string) {
+	// load css for theme
+	function preload_theme(theme: Theme) {
 		const link = document.createElement('link');
 		link.rel = 'stylesheet';
 		link.disabled = false;
-		link.href = href;
+		link.href = `https://bootswatch.com/5/${theme.name.toLowerCase()}/bootstrap.min.css`;
 
-		return new Promise<HTMLLinkElement>((resolve, reject) => {
+		return new Promise<Theme>((resolve, reject) => {
 			link.onload = function () {
 				link.onload = null;
 				link.disabled = true;
-				resolve(link);
+
+				theme.link = link;
+				theme.loaded = true;
+				resolve(theme);
 			};
 			link.onerror = event => {
 				link.onerror = null;
@@ -33,9 +54,9 @@ export const use_theme_store = defineStore("theme", () => {
 			throw new Error(`Theme '${name}' is not available`);
 		}
 
-		for (let key of Object.keys(themes)) {
-			if ((name == key) == !!themes[key].disabled) {
-				themes[key].disabled = (name != key);
+		for (let theme of Object.values(themes)) {
+			if (theme.loaded && ((name == theme.name) == !!theme.link!.disabled)) {
+				theme.link!.disabled = (name != theme.name);
 			}
 		}
 
@@ -46,44 +67,43 @@ export const use_theme_store = defineStore("theme", () => {
 		return name in themes;
 	}
 
+	// if themes aren't loaded yet use get_saved_theme
 	function get_current() {
-		return Object.keys(themes).find(e => !themes[e].disabled) ?? "";
+		return Object.values(themes).find(theme => theme.loaded && !theme.link!.disabled) ?? "";
 	}
 
-	function get_current_instant() {
+	// usable before themes are available. otherwise prefer get_current
+	function get_saved_theme() {
 		return localStorage.getItem("theme") ?? "";
 	}
 
 	function get_all() {
-		return Object.keys(themes);
+		return themes;
 	}
 
-	function add(name: string, href: string) {
-		return preload_theme(href).then(url => themes[name] = url);
-	}
-
+	// preload all themes listed in themes
 	function init_themes() {
-		let loading_arr = [];
+		let link_promises = [];
 
-		for (let theme of theme_names) {
-			loading_arr.push(add(theme, `https://bootswatch.com/5/${theme.toLowerCase()}/bootstrap.min.css`));
+		for (let theme of Object.values(themes)) {
+			link_promises.push(preload_theme(theme));
 		}
 
-		Promise.all(loading_arr).then(() => {
-			loading.value = false;
-
+		Promise.all(link_promises).then(() => {
 			const saved_theme = localStorage.getItem("theme");
 			if (saved_theme !== null && saved_theme !== undefined && saved_theme in themes) {
 				select_theme(saved_theme);
+				loading.value = false;
 				return;
 			} 
 
-			for (let name of theme_names) {
-				if (name in themes) {
-					select_theme(name);
+			for (let theme of Object.values(themes)) {
+				if (theme.loaded) {
+					select_theme(theme.name);
 					break;
 				}
 			}
+			loading.value = false;
 		});
 	}
 
@@ -93,7 +113,7 @@ export const use_theme_store = defineStore("theme", () => {
 		select_theme,
 		get_all,
 		get_current,
-		get_current_instant,
+		get_saved_theme,
 		has
 	};
 });

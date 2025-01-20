@@ -1,0 +1,26 @@
+{
+    "btns": {
+        "apply": "Apply",
+        "save" : "Save",
+        "cancel": "Cancel"
+    },
+    "errors": {
+        "username_not_found": "Incorrect username",
+        "password_incorrect": "Incorrect password",
+        "404": "Not found"
+    },
+    "home": "Home",
+    "latest": "Latest",
+    "projects": "Projects",
+    "options": "Options",
+    "login": "Login",
+    "signup": "Signup",
+    "theme": "Theme",
+    "language": "Language",
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "password_confirm": "Confirm password",
+    "news": "News",
+    "popular": "Popular"
+}

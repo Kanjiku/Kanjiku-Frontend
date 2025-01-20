@@ -12,16 +12,12 @@ const app = createApp(App);
 app.use(createPinia());
 app.use(createI18n({
     legacy: false,
-    locale: "de",
+    locale: localStorage.getItem("locale") ?? "de",
     fallbackLocale: "en",
     availableLocales: ["de", "en"],
     messages: {
-        de: {
-            full_language: "Deutsch"
-        },
-        en: {
-            full_language: "English"
-        }
+        de: await import("@/locales/de.json"),
+        en: await import("@/locales/en.json")
     }
 }));
 app.use(router);

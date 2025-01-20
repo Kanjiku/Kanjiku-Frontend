@@ -23,7 +23,6 @@ export const use_alert_store = defineStore("alerts", () => {
         [AlertType.ERROR, 10000]
     ]);
 
-
     function add(type: AlertType, text: string, expire?: number) {
         expire = expire ?? default_durations.get(type);
         console.log(text, expire);

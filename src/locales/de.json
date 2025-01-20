@@ -1,0 +1,26 @@
+{
+    "btns": {
+        "apply": "Anwenden",
+        "save" : "Speichern",
+        "cancel": "Abbrechen"
+    },
+    "errors": {
+        "username_not_found": "Inkorrekter Benutzername",
+        "password_incorrect": "Inkorrektes Passwort",
+        "404": "Nicht gefunden"
+    },
+    "home": "Home",
+    "latest": "Neueste",
+    "projects": "Projekte",
+    "options": "Optionen",
+    "login": "Einloggen",
+    "signup": "Registrieren",
+    "theme": "Design",
+    "language": "Sprache",
+    "username": "Benutzername",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "password_confirm": "Passwort bestätigen",
+    "news": "Neuigkeiten",
+    "popular": "Beliebt"
+}
