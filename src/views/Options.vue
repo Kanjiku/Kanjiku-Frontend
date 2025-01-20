@@ -8,14 +8,12 @@ const {messages, t} = useI18n({
     fallbackLocale: "en",
     messages: {
         de: {
-            full_language: "Deutsch",
             options: "Optionen",
             theme: "Design",
             language: "Sprache",
             apply: "Anwenden"
         },
         en: {
-            full_language: "English",
             options: "Options",
             theme: "Theme",
             language: "Language",
@@ -24,6 +22,11 @@ const {messages, t} = useI18n({
     }
 
 });
+
+const language_names = new Map([
+    ["en", "English"],
+    ["de", "Deutsch"]
+])
 </script>
 
 <template>
@@ -33,14 +36,17 @@ const {messages, t} = useI18n({
             <fieldset>
                 <div class="form-group mb-4">
                     <label for="theme" class="form-label">{{t("theme")}}</label>
-                    <select name="theme" id="theme" class="form-select" :value="theme_store.get_current_instant()" @change="theme_store.select_theme($event.target.value)">
+                    <select name="theme" id="theme" class="form-select" :value="theme_store.get_current_instant()"
+                        @change="theme_store.select_theme(($event.target as HTMLSelectElement).value)">
                         <option v-for="theme in theme_store.get_all()" :key="theme" :value="theme">{{ theme }}</option>
                     </select>
                 </div>
                 <div class="form-group mb-4">
                     <label for="language" class="form-label">{{t("language")}}</label>
                     <select name="language" id="language" class="form-select" v-model="$i18n.locale">
-                        <option v-for="locale in $i18n.availableLocales" :key="`locale-${locale}`" :value="locale">{{messages[locale].full_language}}</option>
+                        <option v-for="locale in $i18n.availableLocales" :key="`locale-${locale}`" :value="locale">
+                            {{language_names.get(locale) ?? "Error"}}
+                        </option>
                     </select>
                 </div>
             </fieldset>
