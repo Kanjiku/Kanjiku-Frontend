@@ -4,9 +4,13 @@ import Navbar from "@/components/Navbar.vue";
 import Alerts from "@/components/Alerts.vue";
 import Footer from "@/components/Footer.vue";
 import { use_theme_store } from "@/stores/theme_store";
+import { use_user_store } from "./stores/user_store";
 
-const theme_store = use_theme_store();
-theme_store.init_themes();
+const themes = use_theme_store();
+const user = use_user_store();
+
+themes.init_themes();
+user.check_session();
 
 </script>
 

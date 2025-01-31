@@ -4,7 +4,7 @@ import { ref, reactive } from "vue";
 export enum AlertType {
     SUCCESS,
     WARNING,
-    ERROR
+    DANGER
 };
 
 export type Alert = {
@@ -20,22 +20,23 @@ export const use_alert_store = defineStore("alerts", () => {
     const default_durations = new Map([
         [AlertType.SUCCESS, 3000],
         [AlertType.WARNING, 5000],
-        [AlertType.ERROR, 10000]
+        [AlertType.DANGER, 10000]
     ]);
 
     function add(type: AlertType, text: string, expire?: number) {
         expire = expire ?? default_durations.get(type);
-        console.log(text, expire);
+
         let id = id_counter++;
         alerts.push({
             id: id,
             type: type,
             text: text
         });
-        setTimeout(() => {
-            console.log("Removing alert")
-            remove(id);
-        }, expire);
+        if (expire !== -1) {
+            setTimeout(() => {
+                remove(id);
+            }, expire);
+        }
     }
 
     function remove(id: number) {

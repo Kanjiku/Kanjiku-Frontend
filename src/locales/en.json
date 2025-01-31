@@ -1,24 +1,38 @@
 {
     "btns": {
         "apply": "Apply",
-        "save" : "Save",
+        "save": "Save",
         "cancel": "Cancel"
     },
-    "errors": {
+    "error": {
         "username_not_found": "Incorrect username",
         "password_incorrect": "Incorrect password",
-        "404": "Not found"
+        "404": "Not found",
+        "password_confirm_not_matching": "Passwords do not match",
+        "username_too_short": "Username is too short (min. 5 characters)",
+        "username_too_long": "Username is too long (max. 30 characters)",
+        "email_invalid": "Invalid email",
+        "password_too_short": "Password is too short (min. 7 characters)"
+    },
+    "alert": {
+        "activation_email_0": "An activation email was send to ",
+        "activation_email_1": "."
     },
     "home": "Home",
     "latest": "Latest",
     "projects": "Projects",
     "options": "Options",
     "login": "Login",
+    "logout": "Logout",
     "signup": "Signup",
     "theme": "Theme",
+    "theme_light": "hell",
     "language": "Language",
     "username": "Username",
     "email": "Email",
+    "birthday": "Birthday",
+    "required_fields": "required fields",
+    "username_email": "Username/Email",
     "password": "Password",
     "password_confirm": "Confirm password",
     "news": "News",

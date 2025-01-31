@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import {use_alert_store, AlertType} from "@/stores/alert_store";
+import { use_alert_store, AlertType } from "@/stores/alert_store";
 
 const alert_store = use_alert_store();
 </script>
 
 <template>
     <TransitionGroup tag="div" class="alerts row flex-column w-100 gy-5 p-0 mx-auto align-items-center position-fixed" name="alerts">
-        <div v-for="alert in alert_store.alerts" :key="alert.id" :class="['alert-' + AlertType[alert.type].toLowerCase()]" class="my-1 col-sm-10 col-12 alert alert-dismissible">
+        <div v-for="alert in alert_store.alerts" :key="alert.id" :class="['alert-' + AlertType[alert.type].toLowerCase()]"
+            class="my-1 col-sm-10 col-12 alert alert-dismissible">
             <button @click="alert_store.remove(alert.id)" type="button" class="btn-close"></button>
             <p class="mb-0">{{ alert.text }}</p>
         </div>

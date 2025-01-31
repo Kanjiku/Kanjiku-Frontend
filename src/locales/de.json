@@ -1,24 +1,38 @@
 {
     "btns": {
         "apply": "Anwenden",
-        "save" : "Speichern",
+        "save": "Speichern",
         "cancel": "Abbrechen"
     },
-    "errors": {
+    "error": {
         "username_not_found": "Inkorrekter Benutzername",
         "password_incorrect": "Inkorrektes Passwort",
-        "404": "Nicht gefunden"
+        "404": "Nicht gefunden",
+        "password_confirm_not_matching": "Passwort nicht korrekt wiederholt",
+        "username_too_short": "Benutzername ist zu kurz (min. 5 Zeichen)",
+        "username_too_long": "Benutzername ist zu lang (max. 30 Zeichen)",
+        "email_invalid": "Ungültige E-Mail-Adresse",
+        "password_too_short": "Passwort ist zu kurz (min. 7 Zeichen)"
+    },
+    "alert": {
+        "activation_email_0": "Es wurde eine Aktivierungsemail an ",
+        "activation_email_1": " gesendet."
     },
     "home": "Home",
     "latest": "Neueste",
     "projects": "Projekte",
     "options": "Optionen",
     "login": "Einloggen",
+    "logout": "Ausloggen",
     "signup": "Registrieren",
     "theme": "Design",
+    "theme_light": "hell",
     "language": "Sprache",
     "username": "Benutzername",
     "email": "E-Mail",
+    "birthday": "Geburtstag",
+    "required_fields": "Pflichtfelder",
+    "username_email": "Benutzername/E-Mail",
     "password": "Passwort",
     "password_confirm": "Passwort bestätigen",
     "news": "Neuigkeiten",
